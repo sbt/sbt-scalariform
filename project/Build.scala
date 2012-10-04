@@ -1,6 +1,7 @@
 import sbt._
 import sbt.Keys._
 import com.typesafe.sbtscalariform.ScalariformPlugin._
+import sbtrelease.ReleasePlugin._
 
 object Build extends Build {
 
@@ -9,6 +10,7 @@ object Build extends Build {
     file("."),
     settings = Defaults.defaultSettings ++ 
       scalariformSettings ++
+      releaseSettings ++
       Seq(
         organization := "com.typesafe.sbt",
         // version is defined in version.sbt in order to support sbt-release
