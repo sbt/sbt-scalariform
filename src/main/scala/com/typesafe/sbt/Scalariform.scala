@@ -43,7 +43,8 @@ private object Scalariform {
         thisProjectRef,
         configuration,
         cacheDirectory,
-        streams
+        streams,
+        scalaVersion
       ) map formatTask
     )
   }
@@ -64,12 +65,25 @@ private object Scalariform {
     ref: ProjectRef,
     configuration: Configuration,
     cacheDirectory: File,
-    streams: TaskStreams) = {
+    streams: TaskStreams,
+    scalaVersion: String) = {
+    def log(label: String, logger: Logger)(message: String)(count: String) =
+      logger.info(message.format(count, label))
+    def performFormat(files: Set[File]) =
+      for (file <- files if file.exists) {
+        val contents = IO.read(file)
+        val formatted = ScalaFormatter.format(
+          contents,
+          preferences,
+          scalaVersion = pureScalaVersion(scalaVersion)
+        )
+        if (formatted != contents) IO.write(file, formatted)
+      }
     try {
       val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
       val cache = cacheDirectory / "scalariform"
       val logFun = log("%s(%s)".format(Project.display(ref), configuration), streams.log) _
-      handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat(preferences))
+      handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
       handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toSeq // recalculate cache because we're formatting in-place
     } catch {
       case e: ScalaParserException =>
@@ -78,31 +92,20 @@ private object Scalariform {
     }
   }
 
-  private def log(label: String, logger: Logger)(message: String)(count: String) =
-    logger.info(message.format(count, label))
-
   private def handleFiles(
     files: Set[File],
     cache: File,
     logFun: String => Unit,
-    updateFun: Set[File] => Unit) =
-    FileFunction.cached(cache)(FilesInfo.hash, FilesInfo.exists)(handleUpdate(logFun, updateFun))(files)
-
-  private def performFormat(preferences: IFormattingPreferences)(files: Set[File]) =
-    for (file <- files if file.exists) {
-      val contents = IO.read(file)
-      val formatted = ScalaFormatter.format(contents, preferences)
-      if (formatted != contents) IO.write(file, formatted)
+    updateFun: Set[File] => Unit) = {
+    def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
+      val files = in.modified -- in.removed
+      Util.counted("Scala source", "", "s", files.size) foreach logFun
+      updateFun(files)
+      files
     }
-
-  private def handleUpdate(
-    logFun: String => Unit,
-    updateFun: Set[File] => Unit)(
-      in: ChangeReport[File],
-      out: ChangeReport[File]) = {
-    val files = in.modified -- in.removed
-    Util.counted("Scala source", "", "s", files.size) foreach logFun
-    updateFun(files)
-    files
+    FileFunction.cached(cache)(FilesInfo.hash, FilesInfo.exists)(handleUpdate)(files)
   }
+
+  private def pureScalaVersion(scalaVersion: String) =
+    scalaVersion split "-" head
 }
