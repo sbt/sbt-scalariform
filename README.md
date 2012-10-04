@@ -12,13 +12,13 @@ As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugi
 
 Most probably you can skip the details and just add sbt-scalariform to your global or local plugin definition. Global plugins are defined in a `plugins.sbt` file in the `~/.sbt/plugins/` directory and local plugins are defined in a `plugins.sbt` file in the `project/` folder of your project. 
 
-In order to add sbt-scalariform, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings
+In order to add sbt-scalariform, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings:
 
-```
-... // Other settings
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
-```
+  ```
+  ... // Other settings
+  
+  addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
+  ```
 
 After adding the sbt-scalariform plugin like this, you should either start sbt or, if it was already started, reload the current session by executing the `reload` command. If everything worked, you should have the new command `scalariform-format` available.
 
@@ -30,20 +30,22 @@ Basic configuration
 - If you installed this plugin locally (see above section) or if you prefer to have more flexibility to tweak your settings on a per project basis, then you should add the `scalariformSettings` to your local build definition file `build.sbt` or `project/Build.scala` of your project
 
 - For `build.sbt`, paying attention to blank lines between (existing) settings:
+
   ```
   ... // Other settings
-  
+
   scalariformSettings
   ```
 
 - For `Build.scala`:
+
   ```
   lazy val myProject = Project(
-    "myproject",
-    file("."),
-    settings = 
-      ... /* other settings */ ++
-      scalariformSettings
+  "myproject",
+  file("."),
+  settings = 
+    ... /* other settings */ ++
+    scalariformSettings
   )
   ```
 
@@ -63,7 +65,7 @@ Advanced configuration
 
 sbt-scalariform comes with varoius configuration options. Changing the formatting preferences and deactivating the automatic formatting on compile are probably the most important ones and described in detail.
 
-You can provide your own formatting preferences for Scalariform via the setting key `ScalariformKeys.preferences` which expects an instance of `IFormattingPreferences`. Make sure you import all necessary members from the package `scalariform.formatter.preferences`. Let's look at an example which would change the behavior of the default preferences provided by this plugin (by default the below preferences are set to `true`)
+You can provide your own formatting preferences for Scalariform via the setting key `ScalariformKeys.preferences` which expects an instance of `IFormattingPreferences`. Make sure you import all necessary members from the package `scalariform.formatter.preferences`. Let's look at an example which would change the behavior of the default preferences provided by this plugin (by default the below preferences are set to `true`):
 
 ```
 import scalariform.formatter.preferences._
