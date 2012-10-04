@@ -17,7 +17,7 @@ In order to add sbt-scalariform, just add the below setting to the relevant plug
 ```
 ... // Other settings
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0-SNAPSHOT")
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
 ```
 
 After adding the sbt-scalariform plugin like this, you should either start sbt or, if it was already started, reload the current session by executing the `reload` command. If everything worked, you should have the new command `scalariform-format` available.

@@ -1,6 +1,6 @@
 import sbt._
 import sbt.Keys._
-import com.typesafe.sbtscalariform.ScalariformPlugin._
+import com.typesafe.sbt.SbtScalariform._
 import sbtrelease.ReleasePlugin._
 
 object Build extends Build {
