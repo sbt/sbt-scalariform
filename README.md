@@ -1,12 +1,12 @@
 sbt-scalariform
 ===============
 
-Welcome to sbt-scalariform.
+Welcome to sbt-scalariform, an <a href="https://github.com/harrah/xsbt">sbt</a> plugin adding support for source code formatting using <a href="https://github.com/mdr/scalariform">Scalariform<a/>.
 
 Contribution policy
 -------------------
 
-Contributions via GitHub pull requests are gladly accepted from their original author. Along with any pull requests, please state that the contribution is your original work and that you license the work to the project under the project's open source license. Whether or not you state this explicitly, by submitting any copyrighted material via pull request, email, or other means you agree to license the material under the project's open source license and warrant that you have the legal authority to do so.
+Contributions via GitHub pull requests are gladly accepted from their original author. Before we can accept pull requests, you will need to agree to the <a href="http://www.typesafe.com/contribute/cla">Typesafe Contributor License Agreement</a> online, using your GitHub account.
 
 License
 -------

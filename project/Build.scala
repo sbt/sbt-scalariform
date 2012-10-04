@@ -7,35 +7,32 @@ object Build extends Build {
   lazy val root = Project(
     "sbt-scalariform",
     file("."),
-    settings = commonSettings ++ Seq(
-      libraryDependencies ++= Seq(
+    settings = Defaults.defaultSettings ++ 
+      scalariformSettings ++
+      Seq(
+        organization := "com.typesafe.sbt",
+        // version is defined in version.sbt in order to support sbt-release
+        // scalaVersion := "2.9.2",
+        scalacOptions ++= Seq("-unchecked", "-deprecation"),
+        publishTo <<= isSnapshot(if (_) Some(Classpaths.sbtPluginSnapshots) else Some(Classpaths.sbtPluginReleases)),
+        sbtPlugin := true,
+        publishMavenStyle := false,
+        publishArtifact in (Compile, packageDoc) := false,
+        publishArtifact in (Compile, packageSrc) := false,
+        libraryDependencies ++= Seq(
+          Dependencies.Compile.Scalariform
+        ),
+        initialCommands in console := "import com.typesafe.sbt.scalariform._"
       )
-    )
   )
-
-  def commonSettings = 
-    Defaults.defaultSettings ++ 
-    scalariformSettings ++
-    Seq(
-      organization := "com.typesafe.sbt",
-      scalaVersion := "2.10.0-M7",
-      scalacOptions ++= Seq("-unchecked", "-deprecation"),
-      libraryDependencies ++= Seq(
-        Dependencies.Test.ScalaTest,
-        Dependencies.Test.ScalaCheck
-      ),
-      initialCommands in console := "import com.typesafe.sbt.sbt-scalariform._"
-    )
 
   object Dependencies {
 
     object Compile {
-      val Config = "com.typesafe" % "config" % "0.5.2"
+      val Scalariform = "org.scalariform" %% "scalariform" % "0.1.3"
     }
 
     object Test {
-      val ScalaTest = "org.scalatest" %% "scalatest" % "2.0.M4-2.10.0-M7-B1" % "test" cross CrossVersion.full
-      val ScalaCheck = "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" cross CrossVersion.full
     }
   }
 }
