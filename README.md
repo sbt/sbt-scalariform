@@ -20,7 +20,7 @@ In order to add sbt-scalariform, just add the below setting to the relevant plug
   addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
   ```
 
-After adding the sbt-scalariform plugin like this, you should either start sbt or, if it was already started, reload the current session by executing the `reload` command. If everything worked, you should have the new command `scalariform-format` available.
+After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...
 
 Basic configuration
 -------------------
@@ -50,6 +50,8 @@ Basic configuration
   ```
 
 - This will add the task `scalariform-format` in the scopes `compile` and `test` and additionally run this task automatically when compiling; for more control see the section *Advanced configuration* below
+
+Now you are ready to go. Either start sbt or, if it was already started, reload the current session by executing the `reload` command. If everything worked, you should have the new command `scalariform-format` available as well automatic formatting on `compile` and `test:compile` activated.
 
 Using sbt-scalariform
 ---------------------
