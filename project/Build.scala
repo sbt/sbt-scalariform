@@ -1,6 +1,6 @@
 import sbt._
 import sbt.Keys._
-import com.typesafe.sbt.SbtScalariform._
+//import com.typesafe.sbt.SbtScalariform._
 import sbtrelease.ReleasePlugin._
 
 object Build extends Build {
@@ -9,14 +9,19 @@ object Build extends Build {
     "sbt-scalariform",
     file("."),
     settings = Defaults.defaultSettings ++ 
-      scalariformSettings ++
+//      scalariformSettings ++
       releaseSettings ++
       Seq(
         organization := "com.typesafe.sbt",
         // version is defined in version.sbt in order to support sbt-release
         // scalaVersion := "2.9.2",
         scalacOptions ++= Seq("-unchecked", "-deprecation"),
-        publishTo <<= isSnapshot(if (_) Some(Classpaths.sbtPluginSnapshots) else Some(Classpaths.sbtPluginReleases)),
+        publishTo <<= isSnapshot(
+          if (_) 
+            Some(Resolver.url("ivy-snapshots", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-snapshots"))(Resolver.ivyStylePatterns))
+          else
+            Some(Resolver.url("ivy-releases", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns))
+        ),
         sbtPlugin := true,
         publishMavenStyle := false,
         publishArtifact in (Compile, packageDoc) := false,

@@ -80,7 +80,7 @@ private object Scalariform {
         if (formatted != contents) IO.write(file, formatted)
       }
     try {
-      val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
+      val files = sourceDirectories.descendentsExcept(includeFilter, excludeFilter).get.toSet
       val cache = cacheDirectory / "scalariform"
       val logFun = log("%s(%s)".format(Project.display(ref), configuration), streams.log) _
       handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
