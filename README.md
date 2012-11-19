@@ -65,7 +65,7 @@ If you added the settings for this plugin like described above, you can either f
 Advanced configuration
 ----------------------
 
-sbt-scalariform comes with varoius configuration options. Changing the formatting preferences and deactivating the automatic formatting on compile are probably the most important ones and described in detail.
+sbt-scalariform comes with various configuration options. Changing the formatting preferences and deactivating the automatic formatting on compile are probably the most important ones and described in detail.
 
 You can provide your own formatting preferences for Scalariform via the setting key `ScalariformKeys.preferences` which expects an instance of `IFormattingPreferences`. Make sure you import all necessary members from the package `scalariform.formatter.preferences`. Let's look at an example which would change the behavior of the default preferences provided by this plugin (by default the below preferences are set to `true`):
 
