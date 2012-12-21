@@ -6,7 +6,7 @@ Welcome to sbt-scalariform, an <a href="https://github.com/harrah/xsbt">sbt</a> 
 Installing sbt-scalariform
 --------------------------
 
-sbt-scalariform is a plugin for sbt 0.12.0 or higher. Please make sure that you are using an appropriate sbt release. In order to download and install sbt, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Setup">sbt Getting Started Guide / Setup</a>.
+sbt-scalariform is a plugin for sbt 0.12. Please make sure that you are using an appropriate sbt release. In order to download and install sbt, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Setup">sbt Getting Started Guide / Setup</a>.
 
 As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugin, that is by mere configuration. For details about using sbt plugins, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Using-Plugins">sbt Getting Started Guide / Using Plugins</a>. 
 
@@ -17,7 +17,7 @@ In order to add sbt-scalariform, just add the below setting to the relevant plug
   ```
   ... // Other settings
   
-  addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
+  addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
   ```
 
 After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...

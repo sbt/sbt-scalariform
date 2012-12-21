@@ -71,25 +71,24 @@ private object Scalariform {
       logger.info(message.format(count, label))
     def performFormat(files: Set[File]) =
       for (file <- files if file.exists) {
-        val contents = IO.read(file)
-        val formatted = ScalaFormatter.format(
-          contents,
-          preferences,
-          scalaVersion = pureScalaVersion(scalaVersion)
-        )
-        if (formatted != contents) IO.write(file, formatted)
+        try {
+          val contents = IO.read(file)
+          val formatted = ScalaFormatter.format(
+            contents,
+            preferences,
+            scalaVersion = pureScalaVersion(scalaVersion)
+          )
+          if (formatted != contents) IO.write(file, formatted)
+        } catch {
+          case e: ScalaParserException =>
+            streams.log.warn("Scalariform parser error for %s: %s".format(file, e.getMessage))
+        }
       }
-    try {
-      val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
-      val cache = cacheDirectory / "scalariform"
-      val logFun = log("%s(%s)".format(Project.display(ref), configuration), streams.log) _
-      handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
-      handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toSeq // recalculate cache because we're formatting in-place
-    } catch {
-      case e: ScalaParserException =>
-        streams.log.error("Scalariform parser error: see compile for details")
-        Nil
-    }
+    val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
+    val cache = cacheDirectory / "scalariform"
+    val logFun = log("%s(%s)".format(Project.display(ref), configuration), streams.log) _
+    handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
+    handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toSeq // recalculate cache because we're formatting in-place
   }
 
   private def handleFiles(
