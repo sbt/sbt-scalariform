@@ -40,6 +40,8 @@ Basic configuration
 - For `Build.scala`:
 
   ```
+  import com.typesafe.sbt.SbtScalariform.scalariformSettings
+
   lazy val myProject = Project(
   "myproject",
   file("."),
