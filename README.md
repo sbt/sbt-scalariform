@@ -65,13 +65,11 @@ sbt-scalariform comes with various configuration options. Changing the formattin
 
 You can provide your own formatting preferences for Scalariform via the setting key `ScalariformKeys.preferences` which expects an instance of `IFormattingPreferences`. Make sure you import all necessary members from the package `scalariform.formatter.preferences`. Let's look at an example which would change the behavior of the default preferences provided by this plugin (by default the below preferences are set to `true`):
 
-```
-import scalariform.formatter.preferences._
+    import scalariform.formatter.preferences._
 
-ScalariformKeys.preferences := FormattingPreferences()
-  .setPreference(DoubleIndentClassDeclaration, false).
-  .setPreference(PreserveDanglingCloseParenthesis, false)
-```
+    ScalariformKeys.preferences := FormattingPreferences()
+      .setPreference(DoubleIndentClassDeclaration, false)
+      .setPreference(PreserveDanglingCloseParenthesis, false)
 
 If you don't want sbt to automatically format your source files when the tasks `compile` or `test:compile`, just add `defaultScalariformSettings` instead of `scalariformSettings` to your build definition.
 
