@@ -14,11 +14,9 @@ Most probably you can skip the details and just add sbt-scalariform to your glob
 
 In order to add sbt-scalariform, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings:
 
-  ```
-  ... // Other settings
+    ... // Other settings
   
-  addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
-  ```
+    addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
 
 After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...
 
@@ -31,25 +29,21 @@ Basic configuration
 
 - For `build.sbt`, paying attention to blank lines between (existing) settings:
 
-  ```
-  ... // Other settings
+        ... // Other settings
 
-  scalariformSettings
-  ```
+        scalariformSettings
 
 - For `Build.scala`:
 
-  ```
-  import com.typesafe.sbt.SbtScalariform.scalariformSettings
+        import com.typesafe.sbt.SbtScalariform.scalariformSettings
 
-  lazy val myProject = Project(
-  "myproject",
-  file("."),
-  settings = 
-    ... /* other settings */ ++
-    scalariformSettings
-  )
-  ```
+        lazy val myProject = Project(
+          "myproject",
+          file("."),
+          settings = 
+            ... /* other settings */ ++
+            scalariformSettings
+        )
 
 - This will add the task `scalariform-format` in the scopes `compile` and `test` and additionally run this task automatically when compiling; for more control see the section *Advanced configuration* below
 
