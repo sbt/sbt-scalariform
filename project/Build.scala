@@ -1,7 +1,7 @@
 import sbt._
 import sbt.Keys._
-import com.typesafe.sbt.SbtScalariform._
-import sbtrelease.ReleasePlugin._
+//import com.typesafe.sbt.SbtScalariform._
+//import sbtrelease.ReleasePlugin._
 
 object Build extends Build {
 
@@ -9,8 +9,8 @@ object Build extends Build {
     "sbt-scalariform",
     file("."),
     settings = Defaults.defaultSettings ++ 
-      scalariformSettings ++
-      releaseSettings ++
+//      scalariformSettings ++
+//      releaseSettings ++
       Seq(
         organization := "com.typesafe.sbt",
         // version is defined in version.sbt in order to support sbt-release
@@ -31,10 +31,7 @@ object Build extends Build {
   object Dependencies {
 
     object Compile {
-      val Scalariform = "org.scalariform" %% "scalariform" % "0.1.3"
-    }
-
-    object Test {
+      val Scalariform = "org.scalariform" %% "scalariform" % "0.1.4"
     }
   }
 }

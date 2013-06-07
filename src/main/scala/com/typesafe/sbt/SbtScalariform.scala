@@ -26,7 +26,7 @@ object SbtScalariform extends Plugin {
     import ScalariformKeys._
     defaultScalariformSettings ++ Seq(
       compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in Test <<= (compileInputs in Test) dependsOn (format in Test)
+      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
     )
   }
 

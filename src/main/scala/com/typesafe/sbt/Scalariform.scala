@@ -42,7 +42,6 @@ private object Scalariform {
         excludeFilter in format,
         thisProjectRef,
         configuration,
-        cacheDirectory,
         streams,
         scalaVersion
       ) map formatTask
@@ -64,7 +63,6 @@ private object Scalariform {
     excludeFilter: FileFilter,
     ref: ProjectRef,
     configuration: Configuration,
-    cacheDirectory: File,
     streams: TaskStreams,
     scalaVersion: String) = {
     def log(label: String, logger: Logger)(message: String)(count: String) =
@@ -85,8 +83,8 @@ private object Scalariform {
         }
       }
     val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
-    val cache = cacheDirectory / "scalariform"
-    val logFun = log("%s(%s)".format(Project.display(ref), configuration), streams.log) _
+    val cache = streams.cacheDirectory / "scalariform"
+    val logFun = log("%s(%s)".format(Reference.display(ref), configuration), streams.log) _
     handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
     handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toSeq // recalculate cache because we're formatting in-place
   }
@@ -98,7 +96,7 @@ private object Scalariform {
     updateFun: Set[File] => Unit) = {
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
-      Util.counted("Scala source", "", "s", files.size) foreach logFun
+      inc.Analysis.counted("Scala source", "", "s", files.size) foreach logFun
       updateFun(files)
       files
     }
