@@ -8,14 +8,14 @@ Installing sbt-scalariform
 
 sbt-scalariform is a plugin for sbt 0.12. Please make sure that you are using an appropriate sbt release. In order to download and install sbt, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Setup">sbt Getting Started Guide / Setup</a>.
 
-As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugin, that is by mere configuration. For details about using sbt plugins, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Using-Plugins">sbt Getting Started Guide / Using Plugins</a>. 
+As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugin, that is by mere configuration. For details about using sbt plugins, please refer to the <a href="http://github.com/harrah/xsbt/wiki/Getting-Started-Using-Plugins">sbt Getting Started Guide / Using Plugins</a>.
 
-Most probably you can skip the details and just add sbt-scalariform to your global or local plugin definition. Global plugins are defined in a `plugins.sbt` file in the `~/.sbt/plugins/` directory and local plugins are defined in a `plugins.sbt` file in the `project/` folder of your project. 
+Most probably you can skip the details and just add sbt-scalariform to your global or local plugin definition. Global plugins are defined in a `plugins.sbt` file in the `~/.sbt/plugins/` directory and local plugins are defined in a `plugins.sbt` file in the `project/` folder of your project.
 
 In order to add sbt-scalariform, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings:
 
     ... // Other settings
-  
+
     addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
 
 After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...
@@ -40,7 +40,7 @@ Basic configuration
         lazy val myProject = Project(
           "myproject",
           file("."),
-          settings = 
+          settings =
             ... /* other settings */ ++
             scalariformSettings
         )
@@ -66,6 +66,8 @@ sbt-scalariform comes with various configuration options. Changing the formattin
 You can provide your own formatting preferences for Scalariform via the setting key `ScalariformKeys.preferences` which expects an instance of `IFormattingPreferences`. Make sure you import all necessary members from the package `scalariform.formatter.preferences`. Let's look at an example which would change the behavior of the default preferences provided by this plugin (by default the below preferences are set to `true`):
 
     import scalariform.formatter.preferences._
+
+    import com.typesafe.sbt.SbtScalariform._
 
     ScalariformKeys.preferences := FormattingPreferences()
       .setPreference(DoubleIndentClassDeclaration, false)
