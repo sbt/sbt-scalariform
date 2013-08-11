@@ -12,11 +12,17 @@ As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugi
 
 Most probably you can skip the details and just add sbt-scalariform to your global or local plugin definition. Global plugins are defined in a `plugins.sbt` file in the `~/.sbt/plugins/` directory and local plugins are defined in a `plugins.sbt` file in the `project/` folder of your project.
 
-In order to add sbt-scalariform, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings:
+In order to add sbt-scalariform to sbt 0.12.x, just add the below setting to the relevant plugin definition, paying attention to blank lines between (existing) settings:
 
     ... // Other settings
 
     addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
+
+To add sbt-scalariform to sbt 0.13.x, just add:
+
+    ... // Other settings
+
+    addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.1.0")
 
 After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...
 
