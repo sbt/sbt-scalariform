@@ -18,38 +18,64 @@ package com.typesafe.sbt
 
 import sbt._
 import sbt.Keys._
+import scala.collection.immutable.Seq
 import scalariform.formatter.preferences.{ FormattingPreferences, IFormattingPreferences }
 
 object SbtScalariform extends Plugin {
-
-  def scalariformSettings: Seq[Setting[_]] = {
-    import ScalariformKeys._
-    defaultScalariformSettings ++ Seq(
-      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
-    )
-  }
-
-  def defaultScalariformSettings: Seq[Setting[_]] = {
-    import Scalariform._
-    val needToBeScoped = needToBeScopedScalariformSettings
-    noNeedToBeScopedScalariformSettings ++ inConfig(Compile)(needToBeScoped) ++ inConfig(Test)(needToBeScoped)
-  }
 
   object ScalariformKeys {
 
     val format: TaskKey[Seq[File]] =
       TaskKey[Seq[File]](
-        prefix("format"),
+        prefixed("format"),
         "Format (Scala) sources using scalariform"
       )
 
     val preferences: SettingKey[IFormattingPreferences] =
       SettingKey[IFormattingPreferences](
-        prefix("preferences"),
+        prefixed("preferences"),
         "Scalariform formatting preferences, e.g. indentation"
       )
 
-    private def prefix(key: String) = "scalariform-" + key
+    private def prefixed(key: String) = s"scalariform${key.capitalize}"
   }
+
+  import ScalariformKeys._
+
+  val defaultPreferences = {
+    import scalariform.formatter.preferences._
+    FormattingPreferences()
+      .setPreference(DoubleIndentClassDeclaration, true)
+      .setPreference(PreserveDanglingCloseParenthesis, true)
+  }
+
+  def scalariformSettings: Seq[Setting[_]] =
+    defaultScalariformSettings ++ List(
+      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
+      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
+    )
+
+  def defaultScalariformSettings: Seq[Setting[_]] =
+    noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+
+  def configScalariformSettings: Seq[Setting[_]] =
+    List(
+      (unmanagedSourceDirectories in format) := List(scalaSource.value),
+      format := Scalariform(
+        preferences.value,
+        (unmanagedSourceDirectories in format).value.toList,
+        (includeFilter in format).value,
+        (excludeFilter in format).value,
+        thisProjectRef.value,
+        configuration.value,
+        streams.value,
+        scalaVersion.value
+      )
+    )
+
+  def noConfigScalariformSettings: Seq[Setting[_]] =
+    List(
+      preferences := defaultPreferences,
+      includeFilter in format := "*.scala"
+    )
 }

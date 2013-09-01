@@ -18,45 +18,14 @@ package com.typesafe.sbt
 
 import sbt._
 import sbt.Keys._
+import scala.collection.immutable.Seq
 import scalariform.formatter.ScalaFormatter
 import scalariform.formatter.preferences.IFormattingPreferences
 import scalariform.parser.ScalaParserException
 
 private object Scalariform {
 
-  private val defaultPreferences = {
-    import scalariform.formatter.preferences._
-    FormattingPreferences()
-      .setPreference(DoubleIndentClassDeclaration, true)
-      .setPreference(PreserveDanglingCloseParenthesis, true)
-  }
-
-  def needToBeScopedScalariformSettings: Seq[Setting[_]] = {
-    import SbtScalariform.ScalariformKeys._
-    List(
-      unmanagedSourceDirectories in format <<= Seq(scalaSource).join,
-      format <<= (
-        preferences,
-        unmanagedSourceDirectories in format,
-        includeFilter in format,
-        excludeFilter in format,
-        thisProjectRef,
-        configuration,
-        streams,
-        scalaVersion
-      ) map formatTask
-    )
-  }
-
-  def noNeedToBeScopedScalariformSettings: Seq[Setting[_]] = {
-    import SbtScalariform.ScalariformKeys._
-    List(
-      preferences := defaultPreferences,
-      includeFilter in format := "*.scala"
-    )
-  }
-
-  private def formatTask(
+  def apply(
     preferences: IFormattingPreferences,
     sourceDirectories: Seq[File],
     includeFilter: FileFilter,
@@ -64,9 +33,11 @@ private object Scalariform {
     ref: ProjectRef,
     configuration: Configuration,
     streams: TaskStreams,
-    scalaVersion: String) = {
+    scalaVersion: String): Seq[File] = {
+
     def log(label: String, logger: Logger)(message: String)(count: String) =
       logger.info(message.format(count, label))
+
     def performFormat(files: Set[File]) =
       for (file <- files if file.exists) {
         try {
@@ -82,27 +53,30 @@ private object Scalariform {
             streams.log.warn("Scalariform parser error for %s: %s".format(file, e.getMessage))
         }
       }
+
     val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
     val cache = streams.cacheDirectory / "scalariform"
     val logFun = log("%s(%s)".format(Reference.display(ref), configuration), streams.log) _
     handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
-    handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toSeq // recalculate cache because we're formatting in-place
+    handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toList // recalculate cache because we're formatting in-place
   }
 
-  private def handleFiles(
+  def handleFiles(
     files: Set[File],
     cache: File,
     logFun: String => Unit,
-    updateFun: Set[File] => Unit) = {
+    updateFun: Set[File] => Unit): Set[File] = {
+
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
       inc.Analysis.counted("Scala source", "", "s", files.size) foreach logFun
       updateFun(files)
       files
     }
+
     FileFunction.cached(cache)(FilesInfo.hash, FilesInfo.exists)(handleUpdate)(files)
   }
 
-  private def pureScalaVersion(scalaVersion: String) =
+  def pureScalaVersion(scalaVersion: String): String =
     scalaVersion split "-" head
 }
