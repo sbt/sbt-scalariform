@@ -60,10 +60,10 @@ object SbtScalariform extends Plugin {
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
-      (unmanagedSourceDirectories in format) := List(scalaSource.value),
+      (sourceDirectories in format) := List(scalaSource.value),
       format := Scalariform(
         preferences.value,
-        (unmanagedSourceDirectories in format).value.toList,
+        (sourceDirectories in format).value.toList,
         (includeFilter in format).value,
         (excludeFilter in format).value,
         thisProjectRef.value,
