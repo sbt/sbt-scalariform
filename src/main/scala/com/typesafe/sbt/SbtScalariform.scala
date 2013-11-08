@@ -37,7 +37,7 @@ object SbtScalariform extends Plugin {
         "Scalariform formatting preferences, e.g. indentation"
       )
 
-    private def prefixed(key: String) = s"scalariform${key.capitalize}"
+    private def prefixed(key: String) = s"scalariform-$key"
   }
 
   import ScalariformKeys._
