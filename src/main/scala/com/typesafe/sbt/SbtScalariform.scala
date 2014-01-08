@@ -26,14 +26,15 @@ object SbtScalariform extends Plugin {
     import ScalariformKeys._
     defaultScalariformSettings ++ Seq(
       compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in Test <<= (compileInputs in Test) dependsOn (format in Test)
+      compileInputs in Test <<= (compileInputs in Test) dependsOn (format in Test),
+      compileInputs in IntegrationTest <<= (compileInputs in IntegrationTest) dependsOn (format in IntegrationTest)
     )
   }
 
   def defaultScalariformSettings: Seq[Setting[_]] = {
     import Scalariform._
     val needToBeScoped = needToBeScopedScalariformSettings
-    noNeedToBeScopedScalariformSettings ++ inConfig(Compile)(needToBeScoped) ++ inConfig(Test)(needToBeScoped)
+    noNeedToBeScopedScalariformSettings ++ inConfig(Compile)(needToBeScoped) ++ inConfig(Test)(needToBeScoped) ++ inConfig(IntegrationTest)(needToBeScoped)
   }
 
   object ScalariformKeys {
