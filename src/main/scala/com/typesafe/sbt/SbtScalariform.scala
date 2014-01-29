@@ -22,19 +22,24 @@ import scalariform.formatter.preferences.{ FormattingPreferences, IFormattingPre
 
 object SbtScalariform extends Plugin {
 
+  def scalariformSettingsWithIt: Seq[Setting[_]] = {
+    import ScalariformKeys._
+    import Scalariform._
+    scalariformSettings ++ Seq(compileInputs in IntegrationTest <<= (compileInputs in IntegrationTest) dependsOn (format in IntegrationTest)) ++ inConfig(IntegrationTest)(needToBeScopedScalariformSettings)
+  }
+
   def scalariformSettings: Seq[Setting[_]] = {
     import ScalariformKeys._
     defaultScalariformSettings ++ Seq(
       compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in Test <<= (compileInputs in Test) dependsOn (format in Test),
-      compileInputs in IntegrationTest <<= (compileInputs in IntegrationTest) dependsOn (format in IntegrationTest)
+      compileInputs in Test <<= (compileInputs in Test) dependsOn (format in Test)
     )
   }
 
   def defaultScalariformSettings: Seq[Setting[_]] = {
     import Scalariform._
     val needToBeScoped = needToBeScopedScalariformSettings
-    noNeedToBeScopedScalariformSettings ++ inConfig(Compile)(needToBeScoped) ++ inConfig(Test)(needToBeScoped) ++ inConfig(IntegrationTest)(needToBeScoped)
+    noNeedToBeScopedScalariformSettings ++ inConfig(Compile)(needToBeScoped) ++ inConfig(Test)(needToBeScoped)
   }
 
   object ScalariformKeys {
