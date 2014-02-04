@@ -1,11 +1,11 @@
 import sbt._
 
 object Version {
-  val scalariform = "0.1.4"
+  val scalariform = "0.1.5-SNAPSHOT"
 }
 
 object Library {
-  val scalariform = "org.scalariform" %% "scalariform" % Version.scalariform
+  val scalariform = "com.danieltrinh" %% "scalariform" % Version.scalariform
 }
 
 object Dependencies {

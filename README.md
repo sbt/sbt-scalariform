@@ -1,7 +1,7 @@
 sbt-scalariform
 ===============
 
-Welcome to sbt-scalariform, an <a href="https://github.com/harrah/xsbt">sbt</a> plugin adding support for source code formatting using <a href="https://github.com/mdr/scalariform">Scalariform</a>.
+Welcome to sbt-scalariform, an <a href="https://github.com/sbt/sbt">sbt</a> plugin adding support for source code formatting using <a href="https://github.com/daniel-trinh/scalariform">Scalariform</a>.
 
 Installing sbt-scalariform
 --------------------------
@@ -17,16 +17,12 @@ To add sbt-scalariform to your build using sbt 0.13, just add the below setting,
 ```
 ... // Other settings
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.2.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0-SNAPSHOT")
 ```
 
-To add sbt-scalariform to your build using sbt 0.12:
+sbt 0.12.x and below is not supported for this fork, see `https://github.com/sbt/sbt-scalariform` for
+older versions
 
-```
-... // Other settings
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
-```
 
 After adding the sbt-scalariform plugin like this, you still have to configure it, i.e. add the relevant settings to your build definition. Please read on ...
 
@@ -79,10 +75,10 @@ Other useful configuration options are provided by common sbt setting keys:
 - `includeFilter in format`: Defaults to **.scala*
 - `excludeFilter in format`: Using the default of sbt
 
-Mailing list
+Contact
 ------------
 
-Please use the <a href="mailto:simple-build-tool@googlegroups.com">sbt mailing list</a> and prefix the subject with *[sbt-scalariform]*.
+Please contact `@daniel-trinh` on http://github.com for help
 
 Contribution policy
 -------------------
