@@ -55,8 +55,16 @@ object SbtScalariform extends Plugin {
       compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
     )
 
+  def scalariformSettingsWithIt: Seq[Setting[_]] = {
+    //    val x = compileInputs in (IntegrationTest, compile) <<= (IntegrationTest in (Compile, compile)) dependsOn (format in IntegrationTest)
+    scalariformSettings
+  }
+
   def defaultScalariformSettings: Seq[Setting[_]] =
     noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+
+  def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
+    defaultScalariformSettings ++ inConfig(IntegrationTest)(configScalariformSettings)
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
