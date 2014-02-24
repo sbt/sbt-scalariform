@@ -57,7 +57,7 @@ object SbtScalariform extends Plugin {
     )
 
   def scalariformSettingsWithIt: Seq[Setting[_]] =
-    (compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (format in It)) +: scalariformSettings
+    (compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (format in It)) +: defaultScalariformSettingsWithIt
 
   def defaultScalariformSettings: Seq[Setting[_]] =
     noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
