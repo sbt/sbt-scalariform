@@ -17,9 +17,10 @@
 package com.typesafe.sbt
 
 import sbt._
+import sbt.{ IntegrationTest => It }
 import sbt.Keys._
 import scala.collection.immutable.Seq
-import scalariform.formatter.preferences.{ FormattingPreferences, IFormattingPreferences }
+import scalariform.formatter.preferences.IFormattingPreferences
 
 object SbtScalariform extends Plugin {
 
@@ -55,16 +56,14 @@ object SbtScalariform extends Plugin {
       compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
     )
 
-  def scalariformSettingsWithIt: Seq[Setting[_]] = {
-    //    val x = compileInputs in (IntegrationTest, compile) <<= (IntegrationTest in (Compile, compile)) dependsOn (format in IntegrationTest)
-    scalariformSettings
-  }
+  def scalariformSettingsWithIt: Seq[Setting[_]] =
+    (compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (format in It)) +: scalariformSettings
 
   def defaultScalariformSettings: Seq[Setting[_]] =
     noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
 
   def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
-    defaultScalariformSettings ++ inConfig(IntegrationTest)(configScalariformSettings)
+    defaultScalariformSettings ++ inConfig(It)(configScalariformSettings)
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
