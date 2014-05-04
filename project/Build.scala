@@ -20,7 +20,7 @@ object SbtScalariformBuild extends Build {
       .setPreference(SpacesWithinPatternBinders, true)
       .setPreference(DoubleIndentClassDeclaration, true)
   }
-  
+
   def getPublishToRepo(isSnapshot: Boolean) =
     if (isSnapshot)
       Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
@@ -33,8 +33,8 @@ object SbtScalariformBuild extends Build {
     settings = Defaults.defaultSettings ++ SbtScalariform.scalariformSettings ++ Seq(
       organization := "com.danieltrinh",
       name := "sbt-scalariform",
-      version in ThisBuild := "1.3.0-SNAPSHOT",
-      resolvers += Resolvers.sonatypeSnapshots,
+      version in ThisBuild := "1.3.0",
+      resolvers ++= Resolvers.resolvers,
       libraryDependencies ++= Dependencies.sbtScalariform,
       scalacOptions ++= List(
         "-unchecked",
@@ -80,4 +80,10 @@ object SbtScalariformBuild extends Build {
 }
 object Resolvers {
   val sonatypeSnapshots = "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  val sonatypeReleases = "Sonatype OSS Releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+
+  val resolvers = Seq(
+    sonatypeSnapshots,
+    sonatypeReleases
+  )
 }
