@@ -6,7 +6,7 @@ Welcome to sbt-scalariform, an <a href="https://github.com/sbt/sbt">sbt</a> plug
 Installing sbt-scalariform
 --------------------------
 
-sbt-scalariform is a plugin for sbt 0.13 (and 0.12). Please make sure that you are using an appropriate sbt release. In order to download and install sbt, please refer to [sbt Getting Started Guide / Setup](http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html).
+sbt-scalariform is a plugin for sbt 0.13. Please make sure that you are using an appropriate sbt release. In order to download and install sbt, please refer to [sbt Getting Started Guide / Setup](http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html).
 
 As sbt-scalariform is a plugin for sbt, it is installed like any other sbt plugin, that is by mere configuration. For details about using sbt plugins, please refer to [sbt Getting Started Guide / Using Plugins](http://www.scala-sbt.org/release/docs/Getting-Started/Using-Plugins.html).
 
@@ -80,11 +80,6 @@ Contact
 ------------
 
 Please contact `@daniel-trinh` on http://github.com for help
-
-Contribution policy
--------------------
-
-Contributions via GitHub pull requests are gladly accepted from their original author. Before we can accept pull requests, you will need to agree to the [Typesafe Contributor License Agreement](http://www.typesafe.com/contribute/cla) online, using your GitHub account.
 
 License
 -------
