@@ -31,9 +31,9 @@ object SbtScalariformBuild extends Build {
     "sbt-scalariform",
     file("."),
     settings = Defaults.defaultSettings ++ SbtScalariform.scalariformSettings ++ Seq(
-      organization := "com.danieltrinh",
+      organization := "org.scalariform",
       name := "sbt-scalariform",
-      version in ThisBuild := "1.3.0",
+      version in ThisBuild := "1.4.0",
       resolvers ++= Resolvers.resolvers,
       libraryDependencies ++= Dependencies.sbtScalariform,
       scalacOptions ++= List(
