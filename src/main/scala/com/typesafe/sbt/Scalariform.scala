@@ -26,14 +26,15 @@ import scalariform.parser.ScalaParserException
 private object Scalariform {
 
   def apply(
-    preferences: IFormattingPreferences,
+    preferences:       IFormattingPreferences,
     sourceDirectories: Seq[File],
-    includeFilter: FileFilter,
-    excludeFilter: FileFilter,
-    ref: ProjectRef,
-    configuration: Configuration,
-    streams: TaskStreams,
-    scalaVersion: String): Seq[File] = {
+    includeFilter:     FileFilter,
+    excludeFilter:     FileFilter,
+    ref:               ProjectRef,
+    configuration:     Configuration,
+    streams:           TaskStreams,
+    scalaVersion:      String
+  ): Seq[File] = {
 
     def log(label: String, logger: Logger)(message: String)(count: String) =
       logger.info(message.format(count, label))
@@ -62,10 +63,11 @@ private object Scalariform {
   }
 
   def handleFiles(
-    files: Set[File],
-    cache: File,
-    logFun: String => Unit,
-    updateFun: Set[File] => Unit): Set[File] = {
+    files:     Set[File],
+    cache:     File,
+    logFun:    String => Unit,
+    updateFun: Set[File] => Unit
+  ): Set[File] = {
 
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
