@@ -49,7 +49,7 @@ object SbtScalariformBuild extends Build {
       publishTo <<= isSnapshot(getPublishToRepo),
       publishMavenStyle := true,
       publishArtifact in Test := false,
-      publishArtifact in (Compile, packageSrc) := false,
+      publishArtifact in (Compile, packageSrc) := true,
       pomExtra :=
         <url>http://github.com/daniel-trinh/sbt-scalariform</url>
         <licenses>
