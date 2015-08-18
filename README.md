@@ -71,6 +71,8 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 
 If you don't want sbt to automatically format your source files when the tasks `compile` or `test:compile`, just add `defaultScalariformSettings` instead of `scalariformSettings` to your build definition.
 
+If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
+
 Other useful configuration options are provided by common sbt setting keys:
 
 - `includeFilter in format`: Defaults to **.scala*
