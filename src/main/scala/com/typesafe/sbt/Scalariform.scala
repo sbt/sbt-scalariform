@@ -18,10 +18,10 @@ package com.typesafe.sbt
 
 import sbt._
 import sbt.Keys._
-import sbt.{File, FileFilter, _}
+import sbt.{ File, FileFilter, _ }
 import scala.collection.immutable.Seq
 import scalariform.formatter.ScalaFormatter
-import scalariform.formatter.preferences.{IFormattingPreferences, PreferencesImporterExporter}
+import scalariform.formatter.preferences.{ IFormattingPreferences, PreferencesImporterExporter }
 import scalariform.parser.ScalaParserException
 
 private object Scalariform {

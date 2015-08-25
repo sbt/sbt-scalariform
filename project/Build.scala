@@ -29,29 +29,29 @@ object SbtScalariformBuild extends Build {
 
   val sbtScalariform: Project = Project(
     "sbt-scalariform",
-    file("."),
-    settings = Defaults.defaultSettings ++ SbtScalariform.scalariformSettings ++ Seq(
-      organization := "org.scalariform",
-      name := "sbt-scalariform",
-      version in ThisBuild := "1.5.0",
-      resolvers ++= Resolvers.resolvers,
-      libraryDependencies ++= Dependencies.sbtScalariform,
-      scalacOptions ++= List(
-        "-unchecked",
-        "-deprecation",
-        "-Xlint",
-        "-language:_",
-        "-target:jvm-1.6",
-        "-encoding", "UTF-8"
-      ),
-      ScalariformKeys.preferences := formattingPreferences,
-      sbtPlugin := true,
-      publishTo <<= isSnapshot(getPublishToRepo),
-      publishMavenStyle := true,
-      publishArtifact in Test := false,
-      publishArtifact in (Compile, packageSrc) := true,
-      pomExtra :=
-        <url>http://github.com/daniel-trinh/sbt-scalariform</url>
+    file(".")
+  ).settings(Seq(
+    organization := "org.scalariform",
+    name := "sbt-scalariform",
+    version in ThisBuild := "1.5.0-SNAPSHOT",
+    resolvers ++= Resolvers.resolvers,
+    libraryDependencies ++= Dependencies.sbtScalariform,
+    scalacOptions ++= List(
+      "-unchecked",
+      "-deprecation",
+      "-Xlint",
+      "-language:_",
+      "-target:jvm-1.6",
+      "-encoding", "UTF-8"
+    ),
+    ScalariformKeys.preferences := formattingPreferences,
+    sbtPlugin := true,
+    publishTo <<= isSnapshot(getPublishToRepo),
+    publishMavenStyle := true,
+    publishArtifact in Test := false,
+    publishArtifact in (Compile, packageSrc) := true,
+    pomExtra :=
+      <url>http://github.com/daniel-trinh/sbt-scalariform</url>
         <licenses>
           <license>
             <name>Apache 2.0</name>
@@ -75,8 +75,7 @@ object SbtScalariformBuild extends Build {
             <url>http://danieltrinh.com</url>
           </developer>
         </developers>
-    )
-  )
+  ):_*)
 }
 object Resolvers {
   val sonatypeSnapshots = "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
