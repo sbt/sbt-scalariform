@@ -22,9 +22,14 @@ import sbt.Keys._
 import scala.collection.immutable.Seq
 import scalariform.formatter.preferences.IFormattingPreferences
 
-object SbtScalariform extends Plugin {
+object SbtScalariform extends AutoPlugin {
 
-  object ScalariformKeys {
+  val defaultPreferences = {
+    import scalariform.formatter.preferences._
+    FormattingPreferences()
+  }
+
+  object autoImport {
 
     val format: TaskKey[Seq[File]] =
       TaskKey[Seq[File]](
@@ -37,23 +42,29 @@ object SbtScalariform extends Plugin {
         prefixed("preferences"),
         "Scalariform formatting preferences, e.g. indentation"
       )
-
     private def prefixed(key: String) = s"scalariform-$key"
+
+    def scalariformSettings: Seq[Setting[_]] =
+      defaultScalariformSettings ++ List(
+        compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
+        compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
+      )
   }
 
-  import ScalariformKeys._
+  import autoImport._
 
-  val defaultPreferences = {
-    import scalariform.formatter.preferences._
-    FormattingPreferences()
-      .setPreference(DoubleIndentClassDeclaration, true)
+  override lazy val projectSettings = scalariformSettings
+
+  override val trigger = allRequirements
+
+  object ScalariformKeys {
+
+    val format = autoImport.format
+
+    val preferences = autoImport.preferences
   }
 
-  def scalariformSettings: Seq[Setting[_]] =
-    defaultScalariformSettings ++ List(
-      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
-    )
+  def scalariformSettings: Seq[Setting[_]] = autoImport.scalariformSettings
 
   def scalariformSettingsWithIt: Seq[Setting[_]] =
     defaultScalariformSettingsWithIt ++ List(
