@@ -17,6 +17,7 @@
 package com.typesafe.sbt
 
 import sbt._
+import sbt.plugins.JvmPlugin
 import sbt.{ IntegrationTest => It }
 import sbt.Keys._
 import scala.collection.immutable.Seq
@@ -27,6 +28,8 @@ object SbtScalariform extends AutoPlugin {
   val defaultPreferences = {
     import scalariform.formatter.preferences._
     FormattingPreferences()
+      .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
+      .setPreference(DoubleIndentClassDeclaration, true)
   }
 
   object autoImport {
@@ -54,8 +57,8 @@ object SbtScalariform extends AutoPlugin {
   import autoImport._
 
   override lazy val projectSettings = scalariformSettings
-
   override val trigger = allRequirements
+  override val requires = JvmPlugin
 
   object ScalariformKeys {
 
