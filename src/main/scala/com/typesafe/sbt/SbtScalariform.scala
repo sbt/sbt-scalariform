@@ -17,13 +17,22 @@
 package com.typesafe.sbt
 
 import sbt._
+import sbt.plugins.JvmPlugin
+import sbt.{ IntegrationTest => It }
 import sbt.Keys._
 import scala.collection.immutable.Seq
-import scalariform.formatter.preferences.{ FormattingPreferences, IFormattingPreferences }
+import scalariform.formatter.preferences.IFormattingPreferences
 
-object SbtScalariform extends Plugin {
+object SbtScalariform extends AutoPlugin {
 
-  object ScalariformKeys {
+  val defaultPreferences = {
+    import scalariform.formatter.preferences._
+    FormattingPreferences()
+      .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
+      .setPreference(DoubleIndentClassDeclaration, true)
+  }
+
+  object autoImport {
 
     val format: TaskKey[Seq[File]] =
       TaskKey[Seq[File]](
@@ -36,26 +45,42 @@ object SbtScalariform extends Plugin {
         prefixed("preferences"),
         "Scalariform formatting preferences, e.g. indentation"
       )
-
     private def prefixed(key: String) = s"scalariform-$key"
+
+    def scalariformSettings: Seq[Setting[_]] =
+      defaultScalariformSettings ++ List(
+        compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
+        compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
+      )
   }
 
-  import ScalariformKeys._
+  import autoImport._
 
-  val defaultPreferences = {
-    import scalariform.formatter.preferences._
-    FormattingPreferences()
-      .setPreference(DoubleIndentClassDeclaration, true)
+  override lazy val projectSettings = scalariformSettings
+  override val trigger = allRequirements
+  override val requires = JvmPlugin
+
+  object ScalariformKeys {
+
+    val format = autoImport.format
+
+    val preferences = autoImport.preferences
   }
 
-  def scalariformSettings: Seq[Setting[_]] =
-    defaultScalariformSettings ++ List(
+  def scalariformSettings: Seq[Setting[_]] = autoImport.scalariformSettings
+
+  def scalariformSettingsWithIt: Seq[Setting[_]] =
+    defaultScalariformSettingsWithIt ++ List(
       compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
+      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test),
+      compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (format in It)
     )
 
   def defaultScalariformSettings: Seq[Setting[_]] =
     noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+
+  def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
+    defaultScalariformSettings ++ inConfig(It)(configScalariformSettings)
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(

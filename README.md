@@ -18,7 +18,7 @@ To add sbt-scalariform to your build using sbt 0.13, just add the below setting,
 ... // Other settings
 resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.4.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.5.0")
 ```
 
 sbt 0.12.x and below is not supported for this fork, see `https://github.com/sbt/sbt-scalariform` for
@@ -70,6 +70,8 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 ```
 
 If you don't want sbt to automatically format your source files when the tasks `compile` or `test:compile`, just add `defaultScalariformSettings` instead of `scalariformSettings` to your build definition.
+
+If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
 
 Other useful configuration options are provided by common sbt setting keys:
 
