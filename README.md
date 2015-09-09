@@ -18,7 +18,7 @@ To add sbt-scalariform to your build using sbt 0.13, just add the below setting,
 ... // Other settings
 resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.5.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.5.1")
 ```
 
 sbt 0.12.x and below is not supported for this fork, see `https://github.com/sbt/sbt-scalariform` for
