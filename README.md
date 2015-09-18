@@ -17,7 +17,7 @@ To add sbt-scalariform to your build using sbt 0.13, just add the below setting,
 ```
 ... // Other settings
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.4.0")
 ```
 
 To add sbt-scalariform to your build using sbt 0.12:
