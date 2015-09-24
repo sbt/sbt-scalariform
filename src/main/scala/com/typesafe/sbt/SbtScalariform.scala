@@ -46,8 +46,8 @@ object SbtScalariform extends Plugin {
   val defaultPreferences = {
     import scalariform.formatter.preferences._
     FormattingPreferences()
+      .setPreference(AlignSingleLineCaseStatements, true)
       .setPreference(DoubleIndentClassDeclaration, true)
-      .setPreference(PreserveDanglingCloseParenthesis, true)
   }
 
   def scalariformSettings: Seq[Setting[_]] =

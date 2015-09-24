@@ -17,7 +17,7 @@ To add sbt-scalariform to your build using sbt 0.13, just add the below setting,
 ```
 ... // Other settings
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.4.0")
 ```
 
 To add sbt-scalariform to your build using sbt 0.12:
@@ -69,7 +69,6 @@ scalariformSettings
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignSingleLineCaseStatements, true)
   .setPreference(DoubleIndentClassDeclaration, true)
-  .setPreference(PreserveDanglingCloseParenthesis, true)
 ```
 
 If you don't want sbt to automatically format your source files when the tasks `compile` or `test:compile`, just add `defaultScalariformSettings` instead of `scalariformSettings` to your build definition.

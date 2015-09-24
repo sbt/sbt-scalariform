@@ -33,7 +33,8 @@ private object Scalariform {
     ref: ProjectRef,
     configuration: Configuration,
     streams: TaskStreams,
-    scalaVersion: String): Seq[File] = {
+    scalaVersion: String
+  ): Seq[File] = {
 
     def log(label: String, logger: Logger)(message: String)(count: String) =
       logger.info(message.format(count, label))
@@ -65,7 +66,8 @@ private object Scalariform {
     files: Set[File],
     cache: File,
     logFun: String => Unit,
-    updateFun: Set[File] => Unit): Set[File] = {
+    updateFun: Set[File] => Unit
+  ): Set[File] = {
 
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
