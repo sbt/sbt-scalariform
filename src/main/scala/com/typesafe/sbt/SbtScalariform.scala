@@ -47,7 +47,6 @@ object SbtScalariform extends Plugin {
     import scalariform.formatter.preferences._
     FormattingPreferences()
       .setPreference(DoubleIndentClassDeclaration, true)
-      .setPreference(PreserveDanglingCloseParenthesis, true)
   }
 
   def scalariformSettings: Seq[Setting[_]] =
