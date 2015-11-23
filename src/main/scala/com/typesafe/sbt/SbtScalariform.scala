@@ -84,7 +84,7 @@ object SbtScalariform extends AutoPlugin {
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
-      (sourceDirectories in scalariformFormat) := List(scalaSource.value),
+      (sourceDirectories in Global in scalariformFormat) := List(scalaSource.value),
       scalariformFormat := Scalariform(
         scalariformPreferences.value,
         (sourceDirectories in scalariformFormat).value.toList,
@@ -99,7 +99,7 @@ object SbtScalariform extends AutoPlugin {
 
   def noConfigScalariformSettings: Seq[Setting[_]] =
     List(
-      scalariformPreferences := defaultPreferences,
-      includeFilter in scalariformFormat := "*.scala"
+      scalariformPreferences in Global := defaultPreferences,
+      includeFilter in Global in scalariformFormat := "*.scala"
     )
 }
