@@ -11,7 +11,6 @@ object SbtScalariformBuild extends Build {
   val formattingPreferences = {
     import scalariform.formatter.preferences._
     FormattingPreferences()
-      .setPreference(PreserveDanglingCloseParenthesis, true)
       .setPreference(AlignParameters, true)
       .setPreference(CompactStringConcatenation, true)
       .setPreference(CompactControlReadability, false)
@@ -19,6 +18,7 @@ object SbtScalariformBuild extends Build {
       .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 40)
       .setPreference(SpacesWithinPatternBinders, true)
       .setPreference(DoubleIndentClassDeclaration, true)
+      .setPreference(SpacesAroundMultiImports, true)
   }
 
   def getPublishToRepo(isSnapshot: Boolean) =
@@ -33,7 +33,7 @@ object SbtScalariformBuild extends Build {
     settings = Seq(
       organization := "org.scalariform",
       name := "sbt-scalariform",
-      version in ThisBuild := "1.5.1",
+      version in ThisBuild := "1.6.0-SNAPSHOT",
       resolvers ++= Resolvers.resolvers,
       libraryDependencies ++= Dependencies.sbtScalariform,
       scalacOptions ++= List(
