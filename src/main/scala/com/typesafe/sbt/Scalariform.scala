@@ -18,22 +18,24 @@ package com.typesafe.sbt
 
 import sbt._
 import sbt.Keys._
+import sbt.{ File, FileFilter, _ }
 import scala.collection.immutable.Seq
 import scalariform.formatter.ScalaFormatter
-import scalariform.formatter.preferences.IFormattingPreferences
+import scalariform.formatter.preferences.{ IFormattingPreferences, PreferencesImporterExporter }
 import scalariform.parser.ScalaParserException
 
 private object Scalariform {
 
   def apply(
-    preferences: IFormattingPreferences,
+    preferences:       IFormattingPreferences,
     sourceDirectories: Seq[File],
-    includeFilter: FileFilter,
-    excludeFilter: FileFilter,
-    ref: ProjectRef,
-    configuration: Configuration,
-    streams: TaskStreams,
-    scalaVersion: String): Seq[File] = {
+    includeFilter:     FileFilter,
+    excludeFilter:     FileFilter,
+    ref:               ProjectRef,
+    configuration:     Configuration,
+    streams:           TaskStreams,
+    scalaVersion:      String
+  ): Seq[File] = {
 
     def log(label: String, logger: Logger)(message: String)(count: String) =
       logger.info(message.format(count, label))
@@ -57,15 +59,19 @@ private object Scalariform {
     val files = sourceDirectories.descendantsExcept(includeFilter, excludeFilter).get.toSet
     val cache = streams.cacheDirectory / "scalariform"
     val logFun = log("%s(%s)".format(Reference.display(ref), configuration), streams.log) _
+    if (preferencesChanged(streams.cacheDirectory / "scalariform-preferences")(preferences)) {
+      IO.delete(cache)
+    }
     handleFiles(files, cache, logFun("Formatting %s %s ..."), performFormat)
     handleFiles(files, cache, logFun("Reformatted %s %s."), _ => ()).toList // recalculate cache because we're formatting in-place
   }
 
   def handleFiles(
-    files: Set[File],
-    cache: File,
-    logFun: String => Unit,
-    updateFun: Set[File] => Unit): Set[File] = {
+    files:     Set[File],
+    cache:     File,
+    logFun:    String => Unit,
+    updateFun: Set[File] => Unit
+  ): Set[File] = {
 
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
@@ -79,4 +85,17 @@ private object Scalariform {
 
   def pureScalaVersion(scalaVersion: String): String =
     scalaVersion split "-" head
+
+  protected def preferencesChanged(cacheDir: File): IFormattingPreferences => Boolean = {
+    import com.typesafe.sbt.PreferencesProtocol._
+    val prefChanged = new Changed[IFormattingPreferences](cacheDir)
+    prefChanged({ _ => true }, { _ => false })
+  }
+
+  protected implicit val prefEquivalence = new Equiv[IFormattingPreferences]() {
+    override def equiv(x: IFormattingPreferences, y: IFormattingPreferences): Boolean = {
+      PreferencesImporterExporter.asProperties(x) == PreferencesImporterExporter.asProperties(y)
+    }
+  }
+
 }

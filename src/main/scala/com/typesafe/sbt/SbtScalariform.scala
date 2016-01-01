@@ -17,50 +17,63 @@
 package com.typesafe.sbt
 
 import sbt._
+import sbt.plugins.JvmPlugin
 import sbt.{ IntegrationTest => It }
 import sbt.Keys._
 import scala.collection.immutable.Seq
 import scalariform.formatter.preferences.IFormattingPreferences
 
-object SbtScalariform extends Plugin {
+object SbtScalariform extends AutoPlugin {
 
-  object ScalariformKeys {
+  val defaultPreferences = {
+    import scalariform.formatter.preferences._
+    FormattingPreferences()
+      .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
+      .setPreference(DoubleIndentClassDeclaration, true)
+  }
 
-    val format: TaskKey[Seq[File]] =
+  object autoImport {
+
+    val scalariformFormat: TaskKey[Seq[File]] =
       TaskKey[Seq[File]](
         prefixed("format"),
         "Format (Scala) sources using scalariform"
       )
 
-    val preferences: SettingKey[IFormattingPreferences] =
+    val scalariformPreferences: SettingKey[IFormattingPreferences] =
       SettingKey[IFormattingPreferences](
         prefixed("preferences"),
         "Scalariform formatting preferences, e.g. indentation"
       )
-
     private def prefixed(key: String) = s"scalariform-$key"
+
+    def scalariformSettings: Seq[Setting[_]] =
+      defaultScalariformSettings ++ List(
+        compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile),
+        compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test)
+      )
   }
 
-  import ScalariformKeys._
+  import autoImport._
 
-  val defaultPreferences = {
-    import scalariform.formatter.preferences._
-    FormattingPreferences()
-      .setPreference(DoubleIndentClassDeclaration, true)
-      .setPreference(PreserveDanglingCloseParenthesis, true)
+  override lazy val projectSettings = scalariformSettings
+  override val trigger = allRequirements
+  override val requires = JvmPlugin
+
+  object ScalariformKeys {
+
+    val format = autoImport.scalariformFormat
+
+    val preferences = autoImport.scalariformPreferences
   }
 
-  def scalariformSettings: Seq[Setting[_]] =
-    defaultScalariformSettings ++ List(
-      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test)
-    )
+  def scalariformSettings: Seq[Setting[_]] = autoImport.scalariformSettings
 
   def scalariformSettingsWithIt: Seq[Setting[_]] =
     defaultScalariformSettingsWithIt ++ List(
-      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (format in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (format in Test),
-      compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (format in It)
+      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile),
+      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test),
+      compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (scalariformFormat in It)
     )
 
   def defaultScalariformSettings: Seq[Setting[_]] =
@@ -71,12 +84,12 @@ object SbtScalariform extends Plugin {
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
-      (sourceDirectories in format) := List(scalaSource.value),
-      format := Scalariform(
-        preferences.value,
-        (sourceDirectories in format).value.toList,
-        (includeFilter in format).value,
-        (excludeFilter in format).value,
+      (sourceDirectories in Global in scalariformFormat) := List(scalaSource.value),
+      scalariformFormat := Scalariform(
+        scalariformPreferences.value,
+        (sourceDirectories in scalariformFormat).value.toList,
+        (includeFilter in scalariformFormat).value,
+        (excludeFilter in scalariformFormat).value,
         thisProjectRef.value,
         configuration.value,
         streams.value,
@@ -86,7 +99,7 @@ object SbtScalariform extends Plugin {
 
   def noConfigScalariformSettings: Seq[Setting[_]] =
     List(
-      preferences := defaultPreferences,
-      includeFilter in format := "*.scala"
+      scalariformPreferences in Global := defaultPreferences,
+      includeFilter in Global in scalariformFormat := "*.scala"
     )
 }

@@ -1,3 +1,3 @@
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.1.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.5.1")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.7.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.1")
