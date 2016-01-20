@@ -138,8 +138,8 @@ If you want to additionally enable Scalariform for your integration tests, use `
 
 Other useful configuration options are provided by common sbt setting keys:
 
-- `includeFilter in format`: Defaults to **.scala*
-- `excludeFilter in format`: Using the default of sbt
+- `includeFilter in scalariformFormat`: Defaults to **.scala*
+- `excludeFilter in scalariformFormat`: Using the default of sbt
 
 Contact
 ------------
