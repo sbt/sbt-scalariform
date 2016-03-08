@@ -134,8 +134,6 @@ SbtScalariform.defaultScalariformSettings
 
 If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
 
-If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
-
 Other useful configuration options are provided by common sbt setting keys:
 
 - `includeFilter in scalariformFormat`: Defaults to **.scala*
