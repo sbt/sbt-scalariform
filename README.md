@@ -23,7 +23,7 @@ To add sbt-scalariform to your build using sbt 0.13.5, just add the below settin
 
 ```
 ... // Other settings
-resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+resolvers += Resolver.typesafeRepo("releases")
 
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")
 ```
