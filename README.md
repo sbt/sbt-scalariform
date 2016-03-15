@@ -83,6 +83,7 @@ You can provide your own formatting preferences for Scalariform via the setting 
 ```
 import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 
 SbtScalariform.scalariformSettings
 
@@ -96,6 +97,7 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 ```
 import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 
 lazy val project = Project(
     ...
