@@ -1,7 +1,7 @@
 sbt-scalariform
 ===============
 
-Welcome to sbt-scalariform, an <a href="https://github.com/sbt/sbt">sbt</a> plugin adding support for source code formatting using <a href="https://github.com/daniel-trinh/scalariform">Scalariform</a>.
+Welcome to sbt-scalariform, an <a href="https://github.com/sbt/sbt">sbt</a> plugin adding support for source code formatting using <a href="https://github.com/scala-ide/scalariform">Scalariform</a>.
 
 Installing sbt-scalariform
 --------------------------
