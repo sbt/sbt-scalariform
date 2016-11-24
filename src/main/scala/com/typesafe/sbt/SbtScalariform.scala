@@ -17,13 +17,28 @@
 package com.typesafe.sbt
 
 import sbt._
-import sbt.plugins.JvmPlugin
 import sbt.{ IntegrationTest => It }
 import sbt.Keys._
 import scala.collection.immutable.Seq
 import scalariform.formatter.preferences.IFormattingPreferences
 
 object SbtScalariform extends AutoPlugin {
+  override def requires = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  object autoImport {
+    val scalariformFormat = taskKey[Seq[File]]("Format (Scala) sources using scalariform")
+    val scalariformPreferences = settingKey[IFormattingPreferences]("Scalariform formatting preferences, e.g. indentation")
+
+    def scalariformSettings: Seq[Setting[_]] = Def.settings(
+      defaultScalariformSettings,
+      compileInputs in (Compile, compile) := ((compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile)).value,
+      compileInputs in (Test, compile) := ((compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test)).value
+    ).toList
+  }
+  import autoImport._
+
+  override def projectSettings = scalariformSettings
 
   val defaultPreferences = {
     import scalariform.formatter.preferences._
@@ -31,34 +46,6 @@ object SbtScalariform extends AutoPlugin {
       .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
       .setPreference(DoubleIndentClassDeclaration, true)
   }
-
-  object autoImport {
-
-    val scalariformFormat: TaskKey[Seq[File]] =
-      TaskKey[Seq[File]](
-        prefixed("format"),
-        "Format (Scala) sources using scalariform"
-      )
-
-    val scalariformPreferences: SettingKey[IFormattingPreferences] =
-      SettingKey[IFormattingPreferences](
-        prefixed("preferences"),
-        "Scalariform formatting preferences, e.g. indentation"
-      )
-    private def prefixed(key: String) = s"scalariform-$key"
-
-    def scalariformSettings: Seq[Setting[_]] =
-      defaultScalariformSettings ++ List(
-        compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile),
-        compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test)
-      )
-  }
-
-  import autoImport._
-
-  override lazy val projectSettings = scalariformSettings
-  override val trigger = allRequirements
-  override val requires = JvmPlugin
 
   object ScalariformKeys {
 
@@ -69,12 +56,12 @@ object SbtScalariform extends AutoPlugin {
 
   def scalariformSettings: Seq[Setting[_]] = autoImport.scalariformSettings
 
-  def scalariformSettingsWithIt: Seq[Setting[_]] =
-    defaultScalariformSettingsWithIt ++ List(
-      compileInputs in (Compile, compile) <<= (compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile),
-      compileInputs in (Test, compile) <<= (compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test),
-      compileInputs in (It, compile) <<= (compileInputs in (It, compile)) dependsOn (scalariformFormat in It)
-    )
+  def scalariformSettingsWithIt: Seq[Setting[_]] = Def.settings(
+    defaultScalariformSettingsWithIt,
+    compileInputs in (Compile, compile) := ((compileInputs in (Compile, compile)) dependsOn (scalariformFormat in Compile)).value,
+    compileInputs in (Test, compile) := ((compileInputs in (Test, compile)) dependsOn (scalariformFormat in Test)).value,
+    compileInputs in (It, compile) := ((compileInputs in (It, compile)) dependsOn (scalariformFormat in It)).value
+  ).toList
 
   def defaultScalariformSettings: Seq[Setting[_]] =
     noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
