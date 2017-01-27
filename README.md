@@ -32,9 +32,8 @@ This will add the task `scalariformFormat` in the scopes `compile` and `test` an
 for more control see the section *Advanced configuration* below
 
 Now you are ready to go. Either start sbt or, if it was already started, reload the current session by executing the 
-`reload` command. If everything worked, you should have the new command `scalariformFormat` available as well automatic 
-formatting on `compile` and `test:compile` activated.
-
+`reload` command. If everything worked, you should have the new commands `scalariformFormat` and `scalariformCheckFormat` 
+available as well automatic formatting on `compile` and `test:compile` activated.
 
 After adding the sbt-scalariform plugin like this, if you want different formatting settings from the default behavior, read 
 the advanced configuration section. 

@@ -28,6 +28,7 @@ object SbtScalariform extends AutoPlugin {
 
   object autoImport {
     val scalariformFormat = taskKey[Seq[File]]("Format (Scala) sources using scalariform")
+    val scalariformCheckFormat = taskKey[Seq[File]]("Check (Scala) sources using scalariform for compliance")
     val scalariformPreferences = settingKey[IFormattingPreferences]("Scalariform formatting preferences, e.g. indentation")
 
     def scalariformSettings: Seq[Setting[_]] = Def.settings(
@@ -50,6 +51,8 @@ object SbtScalariform extends AutoPlugin {
   object ScalariformKeys {
 
     val format = autoImport.scalariformFormat
+
+    val check = autoImport.scalariformCheckFormat
 
     val preferences = autoImport.scalariformPreferences
   }
@@ -80,7 +83,19 @@ object SbtScalariform extends AutoPlugin {
         thisProjectRef.value,
         configuration.value,
         streams.value,
-        scalaVersion.value
+        scalaVersion.value,
+        abortOnChanges = false
+      ),
+      scalariformCheckFormat := Scalariform(
+        scalariformPreferences.value,
+        (sourceDirectories in scalariformFormat).value.toList,
+        (includeFilter in scalariformFormat).value,
+        (excludeFilter in scalariformFormat).value,
+        thisProjectRef.value,
+        configuration.value,
+        streams.value,
+        scalaVersion.value,
+        abortOnChanges = true
       )
     )
 

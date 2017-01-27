@@ -16,7 +16,6 @@
 
 package com.typesafe.sbt
 
-import sbt._
 import sbt.Keys._
 import sbt.{ File, FileFilter, _ }
 import scala.collection.immutable.Seq
@@ -34,7 +33,8 @@ private object Scalariform {
     ref:               ProjectRef,
     configuration:     Configuration,
     streams:           TaskStreams,
-    scalaVersion:      String
+    scalaVersion:      String,
+    abortOnChanges:    Boolean
   ): Seq[File] = {
 
     def log(label: String, logger: Logger)(message: String)(count: String) =
@@ -49,7 +49,10 @@ private object Scalariform {
             preferences,
             scalaVersion = pureScalaVersion(scalaVersion)
           )
-          if (formatted != contents) IO.write(file, formatted)
+          val fileChanged = formatted != contents
+
+          if (fileChanged && abortOnChanges) throw new RuntimeException("Formatting introduces changes, aborting!")
+          else if (fileChanged) IO.write(file, formatted)
         } catch {
           case e: ScalaParserException =>
             streams.log.warn("Scalariform parser error for %s: %s".format(file, e.getMessage))
