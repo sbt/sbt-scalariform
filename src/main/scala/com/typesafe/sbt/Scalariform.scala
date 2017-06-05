@@ -16,15 +16,15 @@
 
 package com.typesafe.sbt
 
-import sbt._
 import sbt.Keys._
-import sbt.{ File, FileFilter, _ }
+import sbt.{ File, FileFilter, FileFunction => _, _ }
 import scala.collection.immutable.Seq
 import scalariform.formatter.ScalaFormatter
 import scalariform.formatter.preferences.{ IFormattingPreferences, PreferencesImporterExporter }
 import scalariform.parser.ScalaParserException
+import SbtCompat._
 
-private object Scalariform {
+object Scalariform {
 
   def apply(
     preferences:       IFormattingPreferences,
@@ -75,7 +75,7 @@ private object Scalariform {
 
     def handleUpdate(in: ChangeReport[File], out: ChangeReport[File]) = {
       val files = in.modified -- in.removed
-      inc.Analysis.counted("Scala source", "", "s", files.size) foreach logFun
+      Analysis.counted("Scala source", "", "s", files.size) foreach logFun
       updateFun(files)
       files
     }
@@ -88,7 +88,7 @@ private object Scalariform {
 
   protected def preferencesChanged(cacheDir: File): IFormattingPreferences => Boolean = {
     import com.typesafe.sbt.PreferencesProtocol._
-    val prefChanged = new Changed[IFormattingPreferences](cacheDir)
+    val prefChanged = changed[IFormattingPreferences](cacheDir)
     prefChanged({ _ => true }, { _ => false })
   }
 

@@ -14,18 +14,24 @@ developers := List(
 
 sbtPlugin := true
 
+crossSbtVersions := Vector("0.13.15", "1.0.0-M6")
+
 scalacOptions ++= List(
   "-unchecked",
   "-deprecation",
   "-Xlint",
   "-language:_",
-  "-target:jvm-1.6",
   "-encoding", "UTF-8"
-)
+) ++ (if (scalaVersion.value startsWith "2.10.") List("-target:jvm-1.6") else List.empty)
 
 resolvers ++= Seq(sonatypeSnapshots, sonatypeReleases)
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.1.8"
+libraryDependencies += {
+  if (scalaVersion.value startsWith "2.10.")
+    "org.scalariform"     %% "scalariform" % "0.1.8"
+  else
+    "com.github.machaval" %% "scalariform" % "0.2.0"
+}
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
