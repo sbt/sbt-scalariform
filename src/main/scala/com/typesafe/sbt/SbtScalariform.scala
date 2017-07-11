@@ -44,7 +44,7 @@ object SbtScalariform extends AutoPlugin {
     import scalariform.formatter.preferences._
     FormattingPreferences()
       .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
-      .setPreference(DoubleIndentClassDeclaration, true)
+      .setPreference(DoubleIndentConstructorArguments, true)
   }
 
   object ScalariformKeys {

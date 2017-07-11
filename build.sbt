@@ -26,12 +26,7 @@ scalacOptions ++= List(
 
 resolvers ++= Seq(sonatypeSnapshots, sonatypeReleases)
 
-libraryDependencies += {
-  if (scalaVersion.value startsWith "2.10.")
-    "org.scalariform" %% "scalariform" % "0.1.8"
-  else
-    "org.scalariform" %% "scalariform" % "0.2.0"
-}
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.0"
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
