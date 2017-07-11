@@ -28,9 +28,9 @@ resolvers ++= Seq(sonatypeSnapshots, sonatypeReleases)
 
 libraryDependencies += {
   if (scalaVersion.value startsWith "2.10.")
-    "org.scalariform"     %% "scalariform" % "0.1.8"
+    "org.scalariform" %% "scalariform" % "0.1.8"
   else
-    "com.github.machaval" %% "scalariform" % "0.2.0"
+    "org.scalariform" %% "scalariform" % "0.2.0"
 }
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
