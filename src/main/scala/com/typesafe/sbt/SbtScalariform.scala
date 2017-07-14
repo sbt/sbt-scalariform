@@ -62,7 +62,7 @@ object SbtScalariform extends AutoPlugin {
   ).toList
 
   def defaultScalariformSettings: Seq[Setting[_]] =
-    noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+    formatOnDemandSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
 
   def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
     defaultScalariformSettings ++ inConfig(It)(configScalariformSettings)
@@ -82,7 +82,7 @@ object SbtScalariform extends AutoPlugin {
       )
     )
 
-  def noConfigScalariformSettings: Seq[Setting[_]] =
+  def formatOnDemandSettings: Seq[Setting[_]] =
     List(
       scalariformPreferences in Global := defaultPreferences,
       includeFilter in Global in scalariformFormat := "*.scala"
