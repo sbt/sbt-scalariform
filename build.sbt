@@ -25,20 +25,16 @@ scalacOptions ++= List(
 
 resolvers ++= Seq(sonatypeSnapshots, sonatypeReleases)
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.0"
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.1"
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
   FormattingPreferences()
     .setPreference(AlignParameters, true)
-    .setPreference(CompactStringConcatenation, true)
-    .setPreference(CompactControlReadability, false)
     .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 40)
-    .setPreference(SpacesWithinPatternBinders, true)
-    .setPreference(DoubleIndentClassDeclaration, true)
-    .setPreference(SpacesAroundMultiImports, true)
     .setPreference(DanglingCloseParenthesis, Preserve)
+    .setPreference(CompactStringConcatenation, true)
+    .setPreference(SpacesAroundMultiImports, true)
 }
 
 publishTo := Some(if (isSnapshot.value) sonatypeSnapshots else sonatypeReleases)
