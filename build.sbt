@@ -2,7 +2,7 @@ val sbtScalariform = Project("sbt-scalariform", file("."))
 
         organization := "org.scalariform"
                 name := "sbt-scalariform"
-version in ThisBuild := "1.6.0"
+version in ThisBuild := "1.7.0"
 
   licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")))
   homepage := scmInfo.value map (_.browseUrl)

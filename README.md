@@ -9,7 +9,7 @@ Installing
 
 ```
 // project/plugins.sbt
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.6.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.7.0")
 ```
 
 Configuration (build.sbt)
