@@ -43,8 +43,6 @@ object SbtScalariform extends AutoPlugin {
   val defaultPreferences = {
     import scalariform.formatter.preferences._
     FormattingPreferences()
-      .setPreference(SpacesAroundMultiImports, true) // this was changed in 0.1.7 scalariform, setting this to preserve default.
-      .setPreference(DoubleIndentConstructorArguments, true)
   }
 
   object ScalariformKeys {
@@ -64,14 +62,14 @@ object SbtScalariform extends AutoPlugin {
   ).toList
 
   def defaultScalariformSettings: Seq[Setting[_]] =
-    noConfigScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+    formatOnDemandSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
 
   def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
     defaultScalariformSettings ++ inConfig(It)(configScalariformSettings)
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
-      (sourceDirectories in Global in scalariformFormat) := List(scalaSource.value),
+      (sourceDirectories in Global in scalariformFormat) := unmanagedSourceDirectories.value,
       scalariformFormat := Scalariform(
         scalariformPreferences.value,
         (sourceDirectories in scalariformFormat).value.toList,
@@ -84,7 +82,7 @@ object SbtScalariform extends AutoPlugin {
       )
     )
 
-  def noConfigScalariformSettings: Seq[Setting[_]] =
+  def formatOnDemandSettings: Seq[Setting[_]] =
     List(
       scalariformPreferences in Global := defaultPreferences,
       includeFilter in Global in scalariformFormat := "*.scala"
