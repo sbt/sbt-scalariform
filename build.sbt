@@ -5,7 +5,6 @@ val sbtScalariform = Project(projectName, file("."))
                 name := projectName
  sonatypeProfileName := organization.value
 version in ThisBuild := "1.7.1-SNAPSHOT"
-        scalaVersion := "2.10.6"
 
   licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")))
   homepage := scmInfo.value map (_.browseUrl)
