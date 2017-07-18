@@ -14,7 +14,7 @@ developers := List(
 
 sbtPlugin := true
 
-crossSbtVersions := Vector("0.13.15", "1.0.0-M6")
+crossSbtVersions := Vector("0.13.15", "1.0.0-RC2")
 
 scalacOptions ++= List(
   "-unchecked",
