@@ -62,7 +62,7 @@ object SbtScalariform extends AutoPlugin {
   ).toList
 
   def defaultScalariformSettings: Seq[Setting[_]] =
-    formatOnDemandSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
+    baseScalariformSettings ++ inConfig(Compile)(configScalariformSettings) ++ inConfig(Test)(configScalariformSettings)
 
   def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
     defaultScalariformSettings ++ inConfig(It)(configScalariformSettings)
@@ -82,9 +82,12 @@ object SbtScalariform extends AutoPlugin {
       )
     )
 
-  def formatOnDemandSettings: Seq[Setting[_]] =
+  def baseScalariformSettings: Seq[Setting[_]] =
     List(
       scalariformPreferences in Global := defaultPreferences,
       includeFilter in Global in scalariformFormat := "*.scala"
     )
+
+  @deprecated("To disable autoformatting see: https://github.com/sbt/sbt-scalariform/blob/master/README.md", "1.7.1")
+  def formatOnDemandSettings: Seq[Setting[_]] = baseScalariformSettings
 }
