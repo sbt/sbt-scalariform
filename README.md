@@ -9,7 +9,7 @@ Installing
 
 ```
 // project/plugins.sbt
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.7.0")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.7.1")
 ```
 
 Configuration (build.sbt)
@@ -34,11 +34,6 @@ val preferences =
 Automatically format on `compile` or `test:compile`
 ```
 SbtScalariform.scalariformSettings ++ Seq(preferences)
-```
-
-Format on demand (run `scalariformFormat` or `test:scalariformFormat` to format files)
-```
-SbtScalariform.formatOnDemandSettings ++ Seq(preferences)
 ```
 
 If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
