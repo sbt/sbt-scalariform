@@ -17,7 +17,7 @@
 package com.typesafe.sbt
 
 import sbt._
-import sbt.{ IntegrationTest => It }
+import sbt.{IntegrationTest => It}
 import sbt.Keys._
 import scala.collection.immutable.Seq
 import scalariform.formatter.preferences.IFormattingPreferences
@@ -69,7 +69,7 @@ object SbtScalariform extends AutoPlugin {
 
   def configScalariformSettings: Seq[Setting[_]] =
     List(
-      (sourceDirectories in Global in scalariformFormat) := unmanagedSourceDirectories.value,
+      (sourceDirectories in scalariformFormat) := unmanagedSourceDirectories.value,
       scalariformFormat := Scalariform(
         scalariformPreferences.value,
         (sourceDirectories in scalariformFormat).value.toList,
