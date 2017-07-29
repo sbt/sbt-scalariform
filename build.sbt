@@ -24,7 +24,7 @@ version in ThisBuild := "1.7.1"
     )
   )
 
-crossSbtVersions := Vector("0.13.15", "1.0.0-RC2")
+crossSbtVersions := Vector("0.13.16", "1.0.0-RC3")
 
 scalacOptions ++= List(
   "-unchecked",
