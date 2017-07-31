@@ -47,6 +47,18 @@ com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
     .setPreference(SpacesAroundMultiImports, false)
 }
 
+ScriptedPlugin.scriptedSettings
+scriptedLaunchOpts := {
+  val sbtAssemblyVersion = "0.14.5"
+
+  scriptedLaunchOpts.value ++ Seq(
+    "-Xmx1024M",
+    s"-Dsbt-assembly.version=${sbtAssemblyVersion}",
+    s"-Dsbt-scalariform.version=${version.value}"
+  )
+}
+scriptedBufferLog := false
+
 publishMavenStyle := true
 publishArtifact in Test := false
 publishArtifact in (Compile, packageDoc) := true

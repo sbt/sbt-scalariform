@@ -1,0 +1,7 @@
+$ copy-file sample/unformatted.scala src/main/scala/sbt-scalariform/unformatted.scala
+
+-$ must-mirror sample/formatted.scala src/main/scala/sbt-scalariform/unformatted.scala
+
+# autoformat on compile
+> compile
+$ must-mirror sample/formatted.scala src/main/scala/sbt-scalariform/unformatted.scala
