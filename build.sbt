@@ -39,11 +39,12 @@ libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.1"
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
   FormattingPreferences()
-    .setPreference(AlignParameters, true)
+    .setPreference(AlignArguments, true)
     .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(DanglingCloseParenthesis, Preserve)
-    .setPreference(CompactStringConcatenation, true)
-    .setPreference(SpacesAroundMultiImports, true)
+    .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 20)
+    .setPreference(DanglingCloseParenthesis, Force)
+    .setPreference(CompactControlReadability, true)
+    .setPreference(SpacesAroundMultiImports, false)
 }
 
 publishMavenStyle := true
