@@ -1,8 +1,8 @@
 package com.typesafe.sbt
 
 import java.io.File
-import sbt.{ Changed, FileInfo }
-import sbt.util.{ CacheStore, CacheStoreFactory }
+import sbt.{Changed, FileInfo}
+import sbt.util.{CacheStore, CacheStoreFactory}
 import sjsonnew.JsonFormat
 
 object SbtCompat {
