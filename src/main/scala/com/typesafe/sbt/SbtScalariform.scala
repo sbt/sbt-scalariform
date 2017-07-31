@@ -88,6 +88,4 @@ object SbtScalariform extends AutoPlugin {
       includeFilter in Global in scalariformFormat := "*.scala"
     )
 
-  @deprecated("To disable autoformatting see: https://github.com/sbt/sbt-scalariform/blob/master/README.md", "1.7.1")
-  def formatOnDemandSettings: Seq[Setting[_]] = baseScalariformSettings
 }
