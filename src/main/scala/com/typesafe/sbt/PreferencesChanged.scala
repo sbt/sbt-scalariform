@@ -11,6 +11,12 @@ import SbtCompat._
 private[sbt] trait PreferencesChanged {
   import com.typesafe.sbt.PreferencesProtocol._
 
+  protected implicit val prefEquivalence = new Equiv[IFormattingPreferences]() {
+    override def equiv(x: IFormattingPreferences, y: IFormattingPreferences): Boolean = {
+      PreferencesImporterExporter.asProperties(x) == PreferencesImporterExporter.asProperties(y)
+    }
+  }
+
   def preferencesChanged(streams: TaskStreams): IFormattingPreferences => Boolean = {
     val hasChanged = {
       val cacheDir = streams.cacheDirectory / "scalariform-preferences"
@@ -26,11 +32,4 @@ private[sbt] trait PreferencesChanged {
     }
     hasChanged({ _ => true }, { _ => false })
   }
-
-  protected implicit val prefEquivalence = new Equiv[IFormattingPreferences]() {
-    override def equiv(x: IFormattingPreferences, y: IFormattingPreferences): Boolean = {
-      PreferencesImporterExporter.asProperties(x) == PreferencesImporterExporter.asProperties(y)
-    }
-  }
-
 }
