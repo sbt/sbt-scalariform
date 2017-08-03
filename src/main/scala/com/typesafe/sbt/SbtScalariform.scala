@@ -134,10 +134,10 @@ object SbtScalariform
   }
 
   @deprecated("use scalariformSettings(autoformat: Boolean)", "1.8.0")
-  def defaultSettings: Seq[Setting[_]] =
+  def defaultScalariformSettings: Seq[Setting[_]] =
     autoImport.scalariformSettings(autoformat = true)
 
   @deprecated("use scalariformSettingsWithIt(autoformat: Boolean)", "1.8.0")
-  def defaultSettingsWithIt: Seq[Setting[_]] =
+  def defaultScalariformSettingsWithIt: Seq[Setting[_]] =
     autoImport.scalariformSettingsWithIt(autoformat = true)
 }
