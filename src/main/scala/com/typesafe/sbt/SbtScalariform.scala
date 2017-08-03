@@ -97,7 +97,10 @@ object SbtScalariform
 
   def configScalariformSettings: Seq[Setting[_]] = {
     List(
-      (sourceDirectories in scalariformFormat) := unmanagedSourceDirectories.value,
+      (sourceDirectories in scalariformFormat) :=
+        unmanagedSourceDirectories.value ++ Seq(
+          baseDirectory.in(LocalRootProject).value
+        ),
       scalariformPreferences := getPreferences(scalariformPreferences.value)(None),
       scalariformFormat := Scalariform(
         getPreferences(scalariformPreferences.value)(Some(streams.value)),
