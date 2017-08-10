@@ -34,7 +34,7 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 ) ++ (if (scalaVersion.value startsWith "2.10.") List("-target:jvm-1.6") else List.empty)
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.2"
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.3"
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
