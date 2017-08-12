@@ -51,7 +51,7 @@ Disable Autoformatting
 
 There are two ways to disable autoformatting: in the build, or in a filesystem preferences file.
 
-Build (globally, `~/.sbt/version/plugins/plugins.sbt`, or in `projectRoot/build.sbt`)
+Build
 ```
 scalariformSettings(autoformat = false)
 Seq(preferences)
