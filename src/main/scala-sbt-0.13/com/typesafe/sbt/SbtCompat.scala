@@ -1,7 +1,7 @@
 package com.typesafe.sbt
 
 import java.io.File
-import sbt.{ Changed, FilesInfo }
+import sbt.{Changed, FilesInfo}
 import sbinary.Format
 
 object SbtCompat {

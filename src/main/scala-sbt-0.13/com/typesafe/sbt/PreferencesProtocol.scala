@@ -1,10 +1,13 @@
 package com.typesafe.sbt
 
-import java.io.{ StringReader, StringWriter }
 import java.util.Properties
+import java.io.{StringReader, StringWriter}
 import sbinary.Operations._
-import sbinary.{ Input, Output, Format, DefaultProtocol }
-import scalariform.formatter.preferences.{ PreferencesImporterExporter, IFormattingPreferences }
+import sbinary.{Input, Output, Format, DefaultProtocol}
+import scalariform.formatter.preferences.{
+  PreferencesImporterExporter,
+  IFormattingPreferences
+}
 
 object PreferencesProtocol extends DefaultProtocol {
 

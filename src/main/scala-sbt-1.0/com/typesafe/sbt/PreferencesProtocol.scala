@@ -1,11 +1,15 @@
 package com.typesafe.sbt
 
-import java.io.{ StringReader, StringWriter }
 import java.util.Properties
-import scalariform.formatter.preferences.{ PreferencesImporterExporter, IFormattingPreferences }
-import sjsonnew.{ Builder, JsonFormat, Unbuilder }
+import java.io.{StringReader, StringWriter}
+import sjsonnew.{Builder, JsonFormat, PrimitiveFormats, Unbuilder}
+import scalariform.formatter.preferences.{
+  PreferencesImporterExporter,
+  IFormattingPreferences
+}
 
-object PreferencesProtocol {
+object PreferencesProtocol
+  extends PrimitiveFormats {
 
   implicit object PrefFormat extends JsonFormat[IFormattingPreferences] {
     override def write[J](value: IFormattingPreferences, builder: Builder[J]): Unit = {

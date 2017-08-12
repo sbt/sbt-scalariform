@@ -4,7 +4,7 @@ val sbtScalariform = Project(projectName, file("."))
         organization := "org.scalariform"
                 name := projectName
  sonatypeProfileName := organization.value
-version in ThisBuild := "1.8.0-SNAPSHOT"
+version in ThisBuild := "1.8.0"
 
   licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")))
   homepage := scmInfo.value map (_.browseUrl)
@@ -34,17 +34,30 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 ) ++ (if (scalaVersion.value startsWith "2.10.") List("-target:jvm-1.6") else List.empty)
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.1"
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.3"
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
   FormattingPreferences()
-    .setPreference(AlignParameters, true)
+    .setPreference(AlignArguments, true)
     .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(DanglingCloseParenthesis, Preserve)
-    .setPreference(CompactStringConcatenation, true)
-    .setPreference(SpacesAroundMultiImports, true)
+    .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 20)
+    .setPreference(DanglingCloseParenthesis, Force)
+    .setPreference(CompactControlReadability, true)
+    .setPreference(SpacesAroundMultiImports, false)
 }
+
+ScriptedPlugin.scriptedSettings
+scriptedLaunchOpts := {
+  val sbtAssemblyVersion = "0.14.5"
+
+  scriptedLaunchOpts.value ++ Seq(
+    "-Xmx1024M",
+    s"-Dsbt-assembly.version=${sbtAssemblyVersion}",
+    s"-Dsbt-scalariform.version=${version.value}"
+  )
+}
+scriptedBufferLog := false
 
 publishMavenStyle := true
 publishArtifact in Test := false
