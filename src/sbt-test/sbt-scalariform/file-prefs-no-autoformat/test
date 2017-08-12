@@ -1,0 +1,9 @@
+$ copy-file sample/unformatted.scala src/main/scala/sbt-scalariform/unformatted.scala
+
+# autoformat disabled, sources should not be formatted
+> compile
+-$ must-mirror sample/formatted.scala src/main/scala/sbt-scalariform/unformatted.scala
+
+# invoking scalariformFormat task directly should format sources
+> scalariformFormat
+$ must-mirror sample/formatted.scala src/main/scala/sbt-scalariform/unformatted.scala
