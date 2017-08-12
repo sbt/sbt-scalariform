@@ -8,8 +8,8 @@ Installing
 --------------------------
 
 ```
-// project/plugins.sbt
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.7.1")
+// in project/plugins.sbt, or globally in ~/.sbt/version/plugins/plugins.sbt
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.0")
 ```
 
 Configuration (build.sbt)
@@ -17,9 +17,8 @@ Configuration (build.sbt)
 
 Imports
 ```
-import scalariform.formatter.preferences._
-import com.typesafe.sbt.SbtScalariform
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
+import scalariform.formatter.preferences._
 ```
 
 Example Preferences
@@ -31,26 +30,48 @@ val preferences =
     .setPreference(DanglingCloseParenthesis, Preserve)
 ```
 
-Automatically format on `compile` or `test:compile`
+Sources are automatically formatted on `compile` and `test:compile` by default, just add formatting preferences to the build:
 ```
-SbtScalariform.scalariformSettings ++ Seq(preferences)
+Seq(preferences)
 ```
 
-If you want to additionally enable Scalariform for your integration tests, use `scalariformSettingsWithIt` or `defaultScalariformSettingsWithIt` instead of the above.
+To enable Scalariform for integration tests in addtion to `compile` and `test:compile` add to the build:
+```
+scalariformSettingsWithIt(autoformat = true)
+Seq(preferences)
+```
 
-Other useful configuration options are provided by common sbt setting keys:
+Other useful configuration options are provided by sbt setting keys:
 
 - `includeFilter in scalariformFormat`: Defaults to **.scala*
 - `excludeFilter in scalariformFormat`: Using the default of sbt
 
-Disabling
---------------------------
+
+Disable Autoformatting
+----------------------
+
+There are two ways to disable autoformatting on `compile` and `test:compile`: in the build, or in a filesystem preferences file.
+
+Build (globally, `~/.sbt/version/plugins/plugins.sbt`, or `projectRoot/build.sbt`)
+```
+scalariformSettings(autoformat = false)
+Seq(preferences)
 
 ```
-import com.typesafe.sbt.SbtScalariform
 
-lazy val project = Project(...).disablePlugins(SbtScalariform)
+Filesystem (globally, `~/.scalariform.conf`, or `projectRoot/.scalariform.conf`)
+
+Copy the `default Scalariform preferences`_ and add to the top of the `scalariform.conf` file:
 ```
+autoformat=false
+```
+
+It is *not* reccommended to mix build and filesystem level preferences, choose one or the other. If for some reason this is required,
+to override, for example, global filesystem preferences, create an empty `.scalariform.conf` file in the project root and
+define build level preferences accordingly.
+
+.. _default Scalariform preferences: https://github.com/scala-ide/scalariform/blob/master/formatterPreferences.properties
+
 
 License
 -------
