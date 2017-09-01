@@ -34,7 +34,7 @@ Sources are automatically formatted on `compile` and `test:compile` by default, 
 Seq(preferences)
 ```
 
-To enable Scalariform for integration tests in addtion to `compile` and `test:compile` add to the build:
+To enable Scalariform for integration tests in addition to `compile` and `test:compile` add to the build:
 ```
 scalariformSettingsWithIt(autoformat = true)
 Seq(preferences)
