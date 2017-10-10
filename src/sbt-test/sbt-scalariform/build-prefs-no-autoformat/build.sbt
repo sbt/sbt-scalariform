@@ -4,7 +4,7 @@ import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 name := "test"
 version := "0.1"
 
-scalariformSettings(autoformat = false)
+scalariformAutoformat := false
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignArguments, true)
