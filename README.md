@@ -16,28 +16,24 @@ Configuration (build.sbt)
 
 Imports
 ```
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import scalariform.formatter.preferences._
 ```
 
-Example Preferences
+Example Preferences:
+
 ```
-val preferences =
-  ScalariformKeys.preferences := ScalariformKeys.preferences.value
+scalariformPreferences := scalariformPreferences.value
     .setPreference(AlignSingleLineCaseStatements, true)
     .setPreference(DoubleIndentConstructorArguments, true)
     .setPreference(DanglingCloseParenthesis, Preserve)
 ```
 
-Sources are automatically formatted on `compile` and `test:compile` by default, just add formatting preferences to the build:
-```
-Seq(preferences)
-```
+Sources are automatically formatted on `compile` and `test:compile` by default.
 
 To enable Scalariform for integration tests in addition to `compile` and `test:compile` add to the build:
+
 ```
-scalariformSettingsWithIt(autoformat = true)
-Seq(preferences)
+scalariformItSettings
 ```
 
 Other useful configuration options are provided by sbt setting keys:
@@ -64,9 +60,9 @@ Disable Autoformatting
 There are two ways to disable autoformatting: in the build, or in a `.scalariform.conf` preferences file.
 
 Build
+
 ```
-scalariformSettings(autoformat = false)
-Seq(preferences)
+scalariformAutoformat := false
 ```
 
 Filesystem

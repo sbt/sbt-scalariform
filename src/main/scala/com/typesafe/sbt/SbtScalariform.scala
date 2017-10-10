@@ -31,69 +31,48 @@ object SbtScalariform
   override def requires = plugins.JvmPlugin
   override def trigger = allRequirements
 
-  override def projectSettings = {
-    // workaround autoplugin defaults overriding user settings
-    // see https://github.com/sbt/sbt/issues/3389
-    if (!processed.get) {
-      autoImport.scalariformSettings(autoformat = true)
-    }
-    else Seq.empty
-  }
-
-  private val processed =
-    new java.util.concurrent.atomic.AtomicBoolean(false)
-
   object autoImport {
     val scalariformFormat = taskKey[Seq[File]]("Format (Scala) sources using scalariform")
     val scalariformPreferences = settingKey[IFormattingPreferences]("Scalariform formatting preferences")
+    val scalariformAutoformat = settingKey[Boolean]("Whether Scala sources should be auto formatted when compile is run")
+    val scalariformDoAutoformat = taskKey[Seq[File]]("Format sources if autoformat is configured")
 
-    def scalariformSettings(autoformat: Boolean): Seq[Setting[_]] = {
-      defaultSettings(autoformat, withIt = false)
-    }
+    @deprecated("Use scalariformAutoformat to turn autoformat on or off", "1.8.1")
+    def scalariformSettings(autoformat: Boolean): Seq[Setting[_]] = Nil
 
-    def scalariformSettingsWithIt(autoformat: Boolean): Seq[Setting[_]] = {
-      defaultSettings(autoformat, withIt = true)
-    }
+    @deprecated("Use scalariformItSettings", "1.8.1")
+    def scalariformSettingsWithIt(autoformat: Boolean): Seq[Setting[_]] = scalariformItSettings
+
+    def scalariformItSettings: Seq[Setting[_]] = inputs(It) ++ inConfig(It)(configScalariformSettings)
   }
   import autoImport._
+
+  override def globalSettings = Seq(
+    scalariformPreferences := defaultPreferences,
+    includeFilter in scalariformFormat := "*.scala",
+    scalariformAutoformat := PreferencesFile(None).forall(_.autoformat.autoformat)
+  )
+
+  override def projectSettings = compileSettings ++
+    inConfig(Compile)(configScalariformSettings) ++
+    inConfig(Test)(configScalariformSettings)
 
   object ScalariformKeys {
     val format = scalariformFormat
     val preferences = scalariformPreferences
+    val autoformat = scalariformAutoformat
   }
 
   val defaultPreferences = FormattingPreferences()
 
-  private def defaultSettings(autoformat: Boolean, withIt: Boolean): Seq[Setting[_]] = {
-    processed.set(true) // see `projectSettings`
-    baseScalariformSettings ++
-      compileSettings(autoformat, withIt) ++
-      inConfig(Compile)(configScalariformSettings) ++
-      inConfig(Test)(configScalariformSettings) ++ (
-        if (withIt) inConfig(It)(configScalariformSettings) else Seq.empty
-      )
-  }
-
-  def baseScalariformSettings: Seq[Setting[_]] = Seq(
-    scalariformPreferences in Global := defaultPreferences,
-    includeFilter in Global in scalariformFormat := "*.scala"
-  )
-
-  private def compileSettings(autoformat: Boolean, withIt: Boolean): Seq[Setting[_]] = {
-    val enabled = (
-      autoformat && !PreferencesFile(None).exists(_.autoformat.isDisabled)
-    )
-    if (!enabled) Seq.empty
-    else if (withIt) compileSettings ++ inputs(It)
-    else compileSettings
-  }
-
   private val compileSettings = inputs(Compile) ++ inputs(Test)
 
-  private def inputs(config: Configuration) = {
+  private def inputs(config: Configuration): Seq[Setting[_]] = {
     val input = compileInputs in (config, compile)
-    input := (input dependsOn (scalariformFormat in config)).value
-  }.toList
+    Seq(
+      input := (input dependsOn (scalariformDoAutoformat in config)).value
+    )
+  }
 
   def configScalariformSettings: Seq[Setting[_]] = {
     List(
@@ -111,7 +90,19 @@ object SbtScalariform
         configuration.value,
         streams.value,
         scalaVersion.value
-      )
+      ),
+      scalariformDoAutoformat := Def.taskDyn {
+        if (scalariformAutoformat.value) {
+          Def.task {
+            scalariformFormat.value
+          }
+        }
+        else {
+          Def.task {
+            Seq.empty[File]
+          }
+        }
+      }.value
     )
   }
 
