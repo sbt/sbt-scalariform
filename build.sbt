@@ -47,7 +47,6 @@ com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
     .setPreference(SpacesAroundMultiImports, false)
 }
 
-ScriptedPlugin.scriptedSettings
 scriptedLaunchOpts := {
   val sbtAssemblyVersion = "0.14.5"
 
