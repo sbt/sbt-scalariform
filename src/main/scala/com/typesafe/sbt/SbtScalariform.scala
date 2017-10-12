@@ -51,8 +51,12 @@ object SbtScalariform
   override def globalSettings = Seq(
     scalariformPreferences := defaultPreferences,
     includeFilter in scalariformFormat := "*.scala",
-    scalariformAutoformat := PreferencesFile(None).forall(_.autoformat.autoformat),
-    scalariformWithBaseDirectory := PreferencesFile(None).forall(_.withBaseDirectory)
+    scalariformAutoformat := (
+      PreferencesFile(None).map(_.autoformat.autoformat).getOrElse(Defaults.autoformat)
+    ),
+    scalariformWithBaseDirectory := (
+      PreferencesFile(None).map(_.withBaseDirectory).getOrElse(Defaults.withBaseDirectory)
+    )
   )
 
   override def projectSettings = compileSettings ++
@@ -63,6 +67,7 @@ object SbtScalariform
     val format = scalariformFormat
     val preferences = scalariformPreferences
     val autoformat = scalariformAutoformat
+    val withBaseDirectory = scalariformWithBaseDirectory
   }
 
   private[sbt] object Defaults {
