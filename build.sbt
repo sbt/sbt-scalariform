@@ -47,6 +47,9 @@ com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
     .setPreference(SpacesAroundMultiImports, false)
 }
 
+// preserve formatting of sbt-scripted test files
+excludeFilter in scalariformFormat := "unformatted.scala" || "formatted.scala"
+
 scriptedLaunchOpts := {
   val sbtAssemblyVersion = "0.14.5"
 
