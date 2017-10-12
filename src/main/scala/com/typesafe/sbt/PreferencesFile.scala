@@ -22,6 +22,7 @@ object PreferencesFile
   }
   case class PreferenceData(
     autoformat: AutoFormat,
+    withBaseDirectory: Boolean,
     prefs: Option[IFormattingPreferences]
   )
 
@@ -45,20 +46,30 @@ object PreferencesFile
 
       val maybeAutoFormat = Option(properties.getProperty("autoformat"))
       val autoformat = AutoFormat(
-        maybeAutoFormat.map(_.toBoolean).getOrElse(true)
+        maybeAutoFormat.map(_.toBoolean).getOrElse(
+          SbtScalariform.Defaults.autoformat
+        )
       )
+      val maybeWithBase = Option(properties.getProperty("withBaseDirectory"))
+      val withBaseDirectory =
+        maybeWithBase.map(_.toBoolean).getOrElse(
+          SbtScalariform.Defaults.withBaseDirectory
+        )
+      val nonStyles = maybeAutoFormat ++ maybeWithBase
       val maybePrefs =
         properties.size match {
           case 0 => None
-          case 1 if maybeAutoFormat.isDefined => None // not a style format
-          case _ => Some(getPreferences(properties))
+          case x if nonStyles.size == x => None
+          case _ => Some(
+            getPreferences(properties)
+          )
         }
-      (PreferenceData(autoformat, maybePrefs), file)
+      (PreferenceData(autoformat, withBaseDirectory, maybePrefs), file)
     }
 
   private def logChanged(data: ((PreferenceData, File), Streams)): Unit = {
     data match {
-      case ((PreferenceData(AutoFormat(autoformat), maybePrefs), file), streams) =>
+      case ((PreferenceData(AutoFormat(autoformat), _, maybePrefs), file), streams) =>
         if (autoFormatChanged(streams)(autoformat)) {
           val action = if (autoformat) "enabled" else "disabled"
           streams.log.info(s"Scalariform auto formatting $action")

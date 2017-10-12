@@ -1,0 +1,7 @@
+$ copy-file sample/unformatted.scala target/A.scala
+
+-$ must-mirror sample/formatted.scala target/A.scala
+
+# autoformat on compile
+> compile
+$ must-mirror sample/formatted.scala target/A.scala

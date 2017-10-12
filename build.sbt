@@ -4,7 +4,7 @@ val sbtScalariform = Project(projectName, file("."))
         organization := "org.scalariform"
                 name := projectName
  sonatypeProfileName := organization.value
-version in ThisBuild := "1.8.0"
+version in ThisBuild := "1.8.1"
 
   licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")))
   homepage := scmInfo.value map (_.browseUrl)
@@ -24,7 +24,7 @@ version in ThisBuild := "1.8.0"
     )
   )
 
-crossSbtVersions := Vector("0.13.16", "1.0.0")
+crossSbtVersions := Vector("0.13.16", "1.0.2")
 
 scalacOptions ++= List(
   "-unchecked",
@@ -47,7 +47,9 @@ com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
     .setPreference(SpacesAroundMultiImports, false)
 }
 
-ScriptedPlugin.scriptedSettings
+// preserve formatting of sbt-scripted test files
+excludeFilter in scalariformFormat := "unformatted.scala" || "formatted.scala"
+
 scriptedLaunchOpts := {
   val sbtAssemblyVersion = "0.14.5"
 

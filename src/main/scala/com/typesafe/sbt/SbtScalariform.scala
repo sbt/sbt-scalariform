@@ -34,8 +34,9 @@ object SbtScalariform
   object autoImport {
     val scalariformFormat = taskKey[Seq[File]]("Format (Scala) sources using scalariform")
     val scalariformPreferences = settingKey[IFormattingPreferences]("Scalariform formatting preferences")
-    val scalariformAutoformat = settingKey[Boolean]("Whether Scala sources should be auto formatted when compile is run")
+    val scalariformAutoformat = settingKey[Boolean]("Whether Scala sources should be auto formatted when compile is run (default: true)")
     val scalariformDoAutoformat = taskKey[Seq[File]]("Format sources if autoformat is configured")
+    val scalariformWithBaseDirectory = settingKey[Boolean]("Whether or not to format sources in project root (default: false)")
 
     @deprecated("Use scalariformAutoformat to turn autoformat on or off", "1.8.1")
     def scalariformSettings(autoformat: Boolean): Seq[Setting[_]] = Nil
@@ -50,7 +51,12 @@ object SbtScalariform
   override def globalSettings = Seq(
     scalariformPreferences := defaultPreferences,
     includeFilter in scalariformFormat := "*.scala",
-    scalariformAutoformat := PreferencesFile(None).forall(_.autoformat.autoformat)
+    scalariformAutoformat := (
+      PreferencesFile(None).map(_.autoformat.autoformat).getOrElse(Defaults.autoformat)
+    ),
+    scalariformWithBaseDirectory := (
+      PreferencesFile(None).map(_.withBaseDirectory).getOrElse(Defaults.withBaseDirectory)
+    )
   )
 
   override def projectSettings = compileSettings ++
@@ -61,6 +67,12 @@ object SbtScalariform
     val format = scalariformFormat
     val preferences = scalariformPreferences
     val autoformat = scalariformAutoformat
+    val withBaseDirectory = scalariformWithBaseDirectory
+  }
+
+  private[sbt] object Defaults {
+    val autoformat = true
+    val withBaseDirectory = false
   }
 
   val defaultPreferences = FormattingPreferences()
@@ -77,8 +89,9 @@ object SbtScalariform
   def configScalariformSettings: Seq[Setting[_]] = {
     List(
       (sourceDirectories in scalariformFormat) :=
-        unmanagedSourceDirectories.value ++ Seq(
-          baseDirectory.in(LocalRootProject).value
+        unmanagedSourceDirectories.value ++ (
+          if (!scalariformWithBaseDirectory.value) Seq.empty
+          else Seq(baseDirectory.in(LocalRootProject).value)
         ),
       scalariformPreferences := getPreferences(scalariformPreferences.value)(None),
       scalariformFormat := Scalariform(
