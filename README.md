@@ -54,15 +54,16 @@ to override, for example, global filesystem preferences, create an empty `.scala
 and define build level preferences accordingly.
 
 
-Disable Autoformatting
+Disable Autoformatting / Enable Formatting of Base Directory Sources
 ----------------------
 
-There are two ways to disable autoformatting: in the build, or in a `.scalariform.conf` preferences file.
+Custom configuration options can be applied in the build, or in a `.scalariform.conf` preferences file.
 
 Build
 
 ```
 scalariformAutoformat := false
+scalariformWithBaseDirectory := true
 ```
 
 Filesystem
@@ -70,6 +71,7 @@ Filesystem
 add to the top of target `.scalariform.conf` file:
 ```
 autoformat=false
+withBaseDirectory=true
 ```
 
 License
