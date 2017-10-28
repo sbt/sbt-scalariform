@@ -4,7 +4,7 @@ val sbtScalariform = Project(projectName, file("."))
         organization := "org.scalariform"
                 name := projectName
  sonatypeProfileName := organization.value
-version in ThisBuild := "1.8.1"
+version in ThisBuild := "1.8.2"
 
   licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")))
   homepage := scmInfo.value map (_.browseUrl)
@@ -24,7 +24,7 @@ version in ThisBuild := "1.8.1"
     )
   )
 
-crossSbtVersions := Vector("0.13.16", "1.0.2")
+crossSbtVersions := Vector("0.13.16", "1.0.3")
 
 scalacOptions ++= List(
   "-unchecked",
@@ -34,7 +34,7 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 ) ++ (if (scalaVersion.value startsWith "2.10.") List("-target:jvm-1.6") else List.empty)
 
-libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.3"
+libraryDependencies += "org.scalariform" %% "scalariform" % "0.2.5"
 
 com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
   import scalariform.formatter.preferences._
