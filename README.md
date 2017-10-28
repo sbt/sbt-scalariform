@@ -8,7 +8,7 @@ Installing
 --------------------------
 
 ```
-addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.1")
+addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.2")
 ```
 
 Configuration (build.sbt)
