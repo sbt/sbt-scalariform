@@ -1,5 +1,5 @@
 language: scala
-jdk: openjdk6
+jdk: openjdk8
 scala: 2.10.6
 sudo: false
 
