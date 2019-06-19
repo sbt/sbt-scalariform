@@ -24,7 +24,7 @@ version in ThisBuild := "1.8.2"
     )
   )
 
-crossSbtVersions := Vector("0.13.16", "1.0.3")
+crossSbtVersions := Vector("0.13.18", "1.2.8")
 
 scalacOptions ++= List(
   "-unchecked",
@@ -50,6 +50,7 @@ com.typesafe.sbt.SbtScalariform.ScalariformKeys.preferences := {
 // preserve formatting of sbt-scripted test files
 excludeFilter in scalariformFormat := "unformatted.scala" || "formatted.scala"
 
+enablePlugins(SbtPlugin)
 scriptedLaunchOpts := {
   val sbtAssemblyVersion = "0.14.5"
 
