@@ -1,6 +1,5 @@
 language: scala
-jdk: openjdk6
-scala: 2.10.6
+jdk: openjdk8
 sudo: false
 
 # Build only master and version tags - http://stackoverflow.com/a/31882307/463761
